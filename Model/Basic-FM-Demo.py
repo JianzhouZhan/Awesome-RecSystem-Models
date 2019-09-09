@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.utils.data as data
 from sklearn import preprocessing
 
-EPOCHS = 50
+EPOCHS = 1000
 BATCH_SIZE = 1000
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -36,14 +36,24 @@ def load_dataset():
 
     header = ['user_id', 'item_id', 'rating', 'timestamp']
     df_train = pd.read_csv('../data/FM-Data/ua.base', sep='\t', names=header)
-    # df_train['rating'] = df_train.rating.apply(lambda x: 1 if int(x) == 4 else 0)
     df_train = df_train.merge(df_user, on='user_id', how='left')
     df_train = df_train.merge(df_item, on='item_id', how='left')
 
     df_test = pd.read_csv('../data/FM-Data/ua.test', sep='\t', names=header)
-    # df_test['rating'] = df_test.rating.apply(lambda x: 1 if int(x) == 4 else 0)
     df_test = df_test.merge(df_user, on='user_id', how='left')
     df_test = df_test.merge(df_item, on='item_id', how='left')
+
+    # 需要对Label进行一定的转换, 因为原始的Label是[1, 2, 3, 4, 5]
+    # 而 cuda中, 如果直接以这种Label的话, 会报错(Label 需要在[0, n_class - 1]范围
+    # 因此, 需要转成[0, 1, 2, 3, 4]
+    map_dict = dict()
+    label_set = sorted(set(df_train['rating']) | set(df_test['rating']))
+    for x in label_set:
+        map_dict[x] = map_dict.get(x, len(map_dict))
+
+    df_train['rating'] = df_train.rating.apply(lambda x: map_dict[x])
+    df_test['rating'] = df_test.rating.apply(lambda x: map_dict[x])
+
     train_labels = np.array(df_train['rating'].astype(np.int32))
     test_labels = np.array(df_test['rating'].astype(np.int32))
     return df_train[cols].values, train_labels, df_test[cols].values, test_labels
@@ -63,10 +73,7 @@ class FM_layer(nn.Module):
 
         # 再计算得到交互的那一个部分
         # 为了使用矩阵计算, (Batch * fea_num) * (fea_num * k * class_num), 我们使用Tensor的转置来处理
-        print(self.v)
-        print(x)
         interaction_part1 = torch.matmul(self.v.permute(2, 1, 0), x.T).permute(2, 1, 0)
-        print(interaction_part1)
         interaction_part1 = torch.pow(interaction_part1, 2)
         interaction_part1 = -0.5 * torch.sum(interaction_part1, dim=1)
         interaction_part1 = torch.squeeze(interaction_part1, dim=1)
@@ -133,9 +140,8 @@ def test(model, device, test_loader):
             pred = output.max(1, keepdim=True)[1]
             correct += pred.eq(target.view_as(pred)).sum().item()
     test_loss /= len(test_loader.dataset)
-    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-        test_loss, correct, len(test_loader.dataset),
-        100. * correct / len(test_loader.dataset)
+    print('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
+        test_loss, correct, len(test_loader.dataset),  100. * correct / len(test_loader.dataset)
     ))
 
 

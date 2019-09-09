@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="718f28e0-e860-4410-b5db-d30bd1f7e54c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Model/Basic-FM-Demo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Model/del_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/FM-Data/iris.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/FM-Data/u.item" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/FM-Data/u.user" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/FM-Data/ua.base" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/FM-Data/ua.test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/RecommendationSystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RecommendationSystem.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/Basic-FM-Demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/Basic-FM-Demo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/del_function.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/FM-Data/iris.csv" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,7 +16,26 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Model/Basic-FM-Demo.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="49" column="21" lean-forward="true" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torch/autograd/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="93">
+              <caret line="90" selection-start-line="90" selection-end-line="90" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -36,6 +52,8 @@
       <find>feature_num</find>
       <find>device</find>
       <find>optim</find>
+      <find>print</find>
+      <find>def test</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -70,6 +88,22 @@
               <item name="RecommendationSystem" type="b2602c69:ProjectViewProjectNode" />
               <item name="RecommendationSystem" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="RecommendationSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecommendationSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecommendationSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecommendationSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="FM-Data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecommendationSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecommendationSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="Model" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -79,7 +113,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -137,18 +171,27 @@
       <option name="presentableId" value="Default" />
       <updated>1567680589653</updated>
     </task>
+    <task id="LOCAL-00001" summary="commit FM demo!">
+      <created>1568003905805</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1568003905805</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15136611" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15136611" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.032327585" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.49137932" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.28401726" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.34449244" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -165,6 +208,8 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/RecommendationSystem" />
     </ignored-roots>
+    <MESSAGE value="commit FM demo!" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit FM demo!" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/data/ua.base" />
@@ -197,7 +242,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Model/del_function.py" />
     <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torch/nn/functional.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="23">
@@ -212,13 +256,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torch/autograd/__init__.py">
+    <entry file="file://$PROJECT_DIR$/../anaconda3/lib/python3.6/site-packages/pandas/io/parsers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="92" selection-start-line="92" selection-end-line="92" />
+        <state relative-caret-position="1029">
+          <caret line="1604" selection-start-line="1604" selection-end-line="1604" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Model/Basic-FM-Demo.py" />
+    <entry file="file://$PROJECT_DIR$/Model/del_function.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torch/autograd/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="93">
+          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Basic-FM-Demo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="49" column="21" lean-forward="true" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
