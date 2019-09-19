@@ -1,27 +1,37 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
-batch_size = 2048
-from sklearn.metrics import roc_auc_score
+import re
 import os
-EPOCHS = 100
 import math
 import pickle
+import torch
 import numpy as np
-import re
+import torch.nn as nn
+import torch.nn.functional as F
+from sklearn.metrics import roc_auc_score
+from data.Criteo.deepFM_dataProcess import EACH_FILE_DATA_NUM
+
+"""
+Pytorch implementation of DeepFM[1]
+
+Reference:
+[1] DeepFM: A Factorization-Machine based Neural Network for CTR Prediction,
+    Huifeng Guo, Ruiming Tang, Yunming Yey, Zhenguo Li, Xiuqiang He
+[2] Tensorflow implementation of DeepFM for CTR prediction 
+    https://github.com/ChenglongChen/tensorflow-DeepFM 
+[3] PaddlePaddle implemantation of DeepFM for CTR prediction
+    https://github.com/PaddlePaddle/models/tree/develop/PaddleRec/ctr/deepfm
+"""
+
+EPOCHS = 10
+BATCH_SIZE = 2048
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-EACH_FILE_DATA_NUM = 204800
-
-# https://github.com/shenweichen/DeepCTR
 
 class DeepFM(nn.Module):
     def __init__(self, num_feat, num_field, dropout_deep, dropout_fm,
                  reg_l1=0.01, reg_l2=0.01, layer_sizes=[400, 400, 400], embedding_size=10):
         super(DeepFM, self).__init__()
         self.reg_l1 = reg_l1
-        self.reg_l2 = reg_l2
+        self.reg_l2 = reg_l2                  # L1/L2正则化并没有去使用
         self.num_feat = num_feat              # denote as M
         self.num_field = num_field            # denote as F
         self.embedding_size = embedding_size  # denote as K
@@ -51,13 +61,13 @@ class DeepFM(nn.Module):
         self.fc = nn.Linear(num_field + embedding_size + all_dims[-1], 1)
 
     def forward(self, feat_index, feat_value):
-        feat_value = torch.unsqueeze(feat_value, dim=2)  # None * F * 1
+        feat_value = torch.unsqueeze(feat_value, dim=2)                       # None * F * 1
 
         # Step1: 先计算一阶线性的部分 sum_square part
         first_weights = self.first_weights(feat_index)                        # None * F * 1
         first_weight_value = torch.mul(first_weights, feat_value)
-        y_first_order = torch.sum(first_weight_value, dim=2)          # None * F
-        y_first_order = nn.Dropout(self.dropout_fm[0])(y_first_order)    # None * F
+        y_first_order = torch.sum(first_weight_value, dim=2)                  # None * F
+        y_first_order = nn.Dropout(self.dropout_fm[0])(y_first_order)         # None * F
 
         # Step2: 再计算二阶部分
         secd_feat_emb = self.feat_embeddings(feat_index)                      # None * F * K
@@ -65,10 +75,10 @@ class DeepFM(nn.Module):
 
         # sum_square part
         summed_feat_emb = torch.sum(feat_emd_value, 1)                        # None * K
-        interaction_part1 = torch.pow(summed_feat_emb, 2)                        # None * K
+        interaction_part1 = torch.pow(summed_feat_emb, 2)                     # None * K
 
         # squared_sum part
-        squared_feat_emd_value = torch.pow(feat_emd_value, 2)                    # None * K
+        squared_feat_emd_value = torch.pow(feat_emd_value, 2)                 # None * K
         interaction_part2 = torch.sum(squared_feat_emd_value, dim=1)          # None * K
 
         y_secd_order = 0.5 * torch.sub(interaction_part1, interaction_part2)
@@ -133,9 +143,9 @@ def train_DeepFM_model_demo(device):
         fname_idx = 0
 
         # 依顺序来遍历访问
-        for batch_idx in range(math.ceil(train_item_count / batch_size)):
+        for batch_idx in range(math.ceil(train_item_count / BATCH_SIZE)):
             # 得到当前Batch所在的数据的下标
-            st_idx, ed_idx = batch_idx * batch_size, (batch_idx + 1) * batch_size
+            st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
             ed_idx = min(ed_idx, train_item_count - 1)
 
             if features_idxs is None:
@@ -181,7 +191,7 @@ def train_DeepFM_model_demo(device):
             if batch_idx % 1000 == 0:
                 print('Train Epoch: {} [{} / {} ({:.0f}%]\tLoss:{:.6f}'.format(
                     epoch, batch_idx * len(idx), train_item_count,
-                           100. * batch_idx / math.ceil(int(train_item_count / batch_size)), loss.item()
+                           100. * batch_idx / math.ceil(int(train_item_count / BATCH_SIZE)), loss.item()
                 ))
 
         fname_idx = 0
@@ -190,13 +200,14 @@ def train_DeepFM_model_demo(device):
         test_loss = 0
         with torch.no_grad():
             # 不断地取出数据进行计算
-            for batch_idx in range(math.ceil(test_item_count / batch_size)):
+            for batch_idx in range(math.ceil(test_item_count / BATCH_SIZE)):
                 # 取出当前Batch所在的数据的下标
-                st_idx, ed_idx = batch_idx * batch_size, (batch_idx + 1) * batch_size
+                st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
                 ed_idx = min(ed_idx, test_item_count - 1)
 
                 if features_idxs is None:
-                    features_idxs, features_values, labels = get_idx_value_label(test_filelist[fname_idx], feat_dict_, shuffle=False)
+                    features_idxs, features_values, labels = get_idx_value_label(
+                        test_filelist[fname_idx], feat_dict_, shuffle=False)
 
                 st_idx = st_idx - fname_idx * EACH_FILE_DATA_NUM
                 ed_idx = ed_idx - fname_idx * EACH_FILE_DATA_NUM
@@ -211,7 +222,8 @@ def train_DeepFM_model_demo(device):
                     batch_labels_part1 = labels[st_idx:ed_idx, :]
 
                     fname_idx += 1
-                    features_idxs, features_values, labels = get_idx_value_label(test_filelist[fname_idx], feat_dict_, shuffle=False)
+                    features_idxs, features_values, labels = get_idx_value_label(
+                        test_filelist[fname_idx], feat_dict_, shuffle=False)
                     ed_idx = ed_idx - EACH_FILE_DATA_NUM
 
                     batch_fea_idxs_part2 = features_idxs[0:ed_idx, :]
@@ -236,9 +248,9 @@ def train_DeepFM_model_demo(device):
                 pred_y.extend(list(output.cpu().numpy()))
                 true_y.extend(list(target.cpu().numpy()))
 
-            print('Roc AUC: %.3f' % roc_auc_score(y_true=np.array(true_y), y_score=np.array(pred_y)))
-            test_loss /= math.ceil(test_item_count / batch_size)
-            print('Test set: Average loss: {:.4f}'.format(test_loss))
+            print('Roc AUC: %.5f' % roc_auc_score(y_true=np.array(true_y), y_score=np.array(pred_y)))
+            test_loss /= math.ceil(test_item_count / BATCH_SIZE)
+            print('Test set: Average loss: {:.5f}'.format(test_loss))
 
 
 def get_idx_value_label(fname, feat_dict_, shuffle=True):
