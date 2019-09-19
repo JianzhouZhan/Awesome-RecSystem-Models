@@ -84,12 +84,12 @@ class FM_layer(nn.Module):
         # 为了使用矩阵计算, (Batch * fea_num) * (fea_num * k * class_num), 我们使用Tensor的转置来处理
         interaction_part1 = torch.matmul(self.v.permute(2, 1, 0), x.T).permute(2, 1, 0)
         interaction_part1 = torch.pow(interaction_part1, 2)
-        interaction_part1 = -0.5 * torch.sum(interaction_part1, dim=1)
+        interaction_part1 = 0.5 * torch.sum(interaction_part1, dim=1)
         interaction_part1 = torch.squeeze(interaction_part1, dim=1)
 
         x_square, v_square = torch.pow(x, 2), torch.pow(self.v, 2)
         interaction_part2 = torch.matmul(v_square.permute(2, 1, 0), x_square.T).permute(2, 1, 0)
-        interaction_part2 = 0.5 * torch.sum(interaction_part2, dim=1)
+        interaction_part2 = -0.5 * torch.sum(interaction_part2, dim=1)
         interaction_part2 = torch.squeeze(interaction_part2, dim=1)
 
         output = linear_part + interaction_part1 + interaction_part2
