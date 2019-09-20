@@ -127,6 +127,7 @@ class CriteoDataset(Dataset):
     def __len__(self):
         return self.item_count
 
+
 def get_raw_data():
     if not os.path.isdir('raw_data'):
         os.mkdir('raw_data')
@@ -134,6 +135,9 @@ def get_raw_data():
     fin = open('train.txt', 'r')
     fout = open('raw_data/part-0', 'w')
     for line_idx, line in enumerate(fin):
+        # if line_idx >= EACH_FILE_DATA_NUM * 10:
+        #     break
+
         if line_idx % EACH_FILE_DATA_NUM == 0 and line_idx != 0:
             fout.close()
             cur_part_idx = int(line_idx / EACH_FILE_DATA_NUM)

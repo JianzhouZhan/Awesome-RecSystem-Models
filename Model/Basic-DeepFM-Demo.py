@@ -117,13 +117,14 @@ def train_DeepFM_model_demo(device):
 
     feat_dict_ = pickle.load(open('../data/Criteo/aid_data/feat_dict_10.pkl2', 'rb'))
 
+    # 下面的num_feat的长度还需要考虑缺失值的处理而多了一个维度
     deepfm = DeepFM(num_feat=len(feat_dict_) + 1, num_field=39,
                     dropout_deep=[0.5, 0.5, 0.5, 0.5], dropout_fm=[0, 0],
                     layer_sizes=[400, 400, 400], embedding_size=10).to(DEVICE)
     print("Start Training DeepFM Model!")
 
     # 定义损失函数还有优化器
-    optimizer = torch.optim.Adam(deepfm.parameters(), lr=1e-4)
+    optimizer = torch.optim.Adam(deepfm.parameters())
 
     # 计数train和test的数据量
     train_item_count, test_item_count = 0, 0
@@ -139,17 +140,25 @@ def train_DeepFM_model_demo(device):
 
     # 由于数据量过大, 如果使用pytorch的DataSet来自定义数据的话, 会耗时很久, 因此, 这里使用其它方式
     for epoch in range(1, EPOCHS + 1):
-        features_idxs, features_values, labels = None, None, None
-        fname_idx = 0
+        train(deepfm, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch)
+        test(deepfm, test_filelist, test_item_count, feat_dict_, device)
 
-        # 依顺序来遍历访问
-        for batch_idx in range(math.ceil(train_item_count / BATCH_SIZE)):
-            # 得到当前Batch所在的数据的下标
+
+def test(model, test_filelist, test_item_count, feat_dict_, device):
+    fname_idx = 0
+    pred_y, true_y = [], []
+    features_idxs, features_values, labels = None, None, None
+    test_loss = 0
+    with torch.no_grad():
+        # 不断地取出数据进行计算
+        for batch_idx in range(math.ceil(test_item_count / BATCH_SIZE)):
+            # 取出当前Batch所在的数据的下标
             st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
-            ed_idx = min(ed_idx, train_item_count - 1)
+            ed_idx = min(ed_idx, test_item_count - 1)
 
             if features_idxs is None:
-                features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], feat_dict_)
+                features_idxs, features_values, labels = get_idx_value_label(
+                    test_filelist[fname_idx], feat_dict_, shuffle=False)
 
             st_idx = st_idx - fname_idx * EACH_FILE_DATA_NUM
             ed_idx = ed_idx - fname_idx * EACH_FILE_DATA_NUM
@@ -164,7 +173,8 @@ def train_DeepFM_model_demo(device):
                 batch_labels_part1 = labels[st_idx:ed_idx, :]
 
                 fname_idx += 1
-                features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], feat_dict_)
+                features_idxs, features_values, labels = get_idx_value_label(
+                    test_filelist[fname_idx], feat_dict_, shuffle=False)
                 ed_idx = ed_idx - EACH_FILE_DATA_NUM
 
                 batch_fea_idxs_part2 = features_idxs[0:ed_idx, :]
@@ -182,75 +192,71 @@ def train_DeepFM_model_demo(device):
             idx = idx.to(device)
             value = batch_fea_values.to(device, dtype=torch.float32)
             target = batch_labels.to(device, dtype=torch.float32)
-            optimizer.zero_grad()
-            output = deepfm(idx, value)
-            loss = F.binary_cross_entropy_with_logits(output, target)
+            output = model(idx, value)
 
-            loss.backward()
-            optimizer.step()
-            if batch_idx % 1000 == 0:
-                print('Train Epoch: {} [{} / {} ({:.0f}%]\tLoss:{:.6f}'.format(
-                    epoch, batch_idx * len(idx), train_item_count,
-                           100. * batch_idx / math.ceil(int(train_item_count / BATCH_SIZE)), loss.item()
-                ))
+            test_loss += F.binary_cross_entropy_with_logits(output, target)
 
-        fname_idx = 0
-        pred_y, true_y = [], []
-        features_idxs, features_values, labels = None, None, None
-        test_loss = 0
-        with torch.no_grad():
-            # 不断地取出数据进行计算
-            for batch_idx in range(math.ceil(test_item_count / BATCH_SIZE)):
-                # 取出当前Batch所在的数据的下标
-                st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
-                ed_idx = min(ed_idx, test_item_count - 1)
+            pred_y.extend(list(output.cpu().numpy()))
+            true_y.extend(list(target.cpu().numpy()))
 
-                if features_idxs is None:
-                    features_idxs, features_values, labels = get_idx_value_label(
-                        test_filelist[fname_idx], feat_dict_, shuffle=False)
+        print('Roc AUC: %.5f' % roc_auc_score(y_true=np.array(true_y), y_score=np.array(pred_y)))
+        test_loss /= math.ceil(test_item_count / BATCH_SIZE)
+        print('Test set: Average loss: {:.5f}'.format(test_loss))
 
-                st_idx = st_idx - fname_idx * EACH_FILE_DATA_NUM
-                ed_idx = ed_idx - fname_idx * EACH_FILE_DATA_NUM
 
-                if ed_idx < EACH_FILE_DATA_NUM:
-                    batch_fea_idxs = features_idxs[st_idx:ed_idx, :]
-                    batch_fea_values = features_values[st_idx:ed_idx, :]
-                    batch_labels = labels[st_idx:ed_idx, :]
-                else:
-                    batch_fea_idxs_part1 = features_idxs[st_idx:ed_idx, :]
-                    batch_fea_values_part1 = features_values[st_idx:ed_idx, :]
-                    batch_labels_part1 = labels[st_idx:ed_idx, :]
+def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch):
+    fname_idx = 0
+    features_idxs, features_values, labels = None, None, None
+    # 依顺序来遍历访问
+    for batch_idx in range(math.ceil(train_item_count / BATCH_SIZE)):
+        # 得到当前Batch所在的数据的下标
+        st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
+        ed_idx = min(ed_idx, train_item_count - 1)
 
-                    fname_idx += 1
-                    features_idxs, features_values, labels = get_idx_value_label(
-                        test_filelist[fname_idx], feat_dict_, shuffle=False)
-                    ed_idx = ed_idx - EACH_FILE_DATA_NUM
+        if features_idxs is None:
+            features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], feat_dict_)
 
-                    batch_fea_idxs_part2 = features_idxs[0:ed_idx, :]
-                    batch_fea_values_part2 = features_values[0:ed_idx, :]
-                    batch_labels_part2 = labels[0:ed_idx, :]
+        st_idx = st_idx - fname_idx * EACH_FILE_DATA_NUM
+        ed_idx = ed_idx - fname_idx * EACH_FILE_DATA_NUM
 
-                    batch_fea_idxs = np.vstack((batch_fea_idxs_part1, batch_fea_idxs_part2))
-                    batch_fea_values = np.vstack((batch_fea_values_part1, batch_fea_values_part2))
-                    batch_labels = np.vstack((batch_labels_part1, batch_labels_part2))
+        if ed_idx < EACH_FILE_DATA_NUM:
+            batch_fea_idxs = features_idxs[st_idx:ed_idx, :]
+            batch_fea_values = features_values[st_idx:ed_idx, :]
+            batch_labels = labels[st_idx:ed_idx, :]
+        else:
+            batch_fea_idxs_part1 = features_idxs[st_idx:ed_idx, :]
+            batch_fea_values_part1 = features_values[st_idx:ed_idx, :]
+            batch_labels_part1 = labels[st_idx:ed_idx, :]
 
-                batch_fea_values = torch.from_numpy(batch_fea_values)
-                batch_labels = torch.from_numpy(batch_labels)
+            fname_idx += 1
+            features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], feat_dict_)
+            ed_idx = ed_idx - EACH_FILE_DATA_NUM
 
-                idx = torch.LongTensor([[int(x) for x in x_idx] for x_idx in batch_fea_idxs])
-                idx = idx.to(device)
-                value = batch_fea_values.to(device, dtype=torch.float32)
-                target = batch_labels.to(device, dtype=torch.float32)
-                output = deepfm(idx, value)
+            batch_fea_idxs_part2 = features_idxs[0:ed_idx, :]
+            batch_fea_values_part2 = features_values[0:ed_idx, :]
+            batch_labels_part2 = labels[0:ed_idx, :]
 
-                test_loss += F.binary_cross_entropy_with_logits(output, target)
+            batch_fea_idxs = np.vstack((batch_fea_idxs_part1, batch_fea_idxs_part2))
+            batch_fea_values = np.vstack((batch_fea_values_part1, batch_fea_values_part2))
+            batch_labels = np.vstack((batch_labels_part1, batch_labels_part2))
 
-                pred_y.extend(list(output.cpu().numpy()))
-                true_y.extend(list(target.cpu().numpy()))
+        batch_fea_values = torch.from_numpy(batch_fea_values)
+        batch_labels = torch.from_numpy(batch_labels)
 
-            print('Roc AUC: %.5f' % roc_auc_score(y_true=np.array(true_y), y_score=np.array(pred_y)))
-            test_loss /= math.ceil(test_item_count / BATCH_SIZE)
-            print('Test set: Average loss: {:.5f}'.format(test_loss))
+        idx = torch.LongTensor([[int(x) for x in x_idx] for x_idx in batch_fea_idxs])
+        idx = idx.to(device)
+        value = batch_fea_values.to(device, dtype=torch.float32)
+        target = batch_labels.to(device, dtype=torch.float32)
+        optimizer.zero_grad()
+        output = model(idx, value)
+        loss = F.binary_cross_entropy_with_logits(output, target)
+
+        loss.backward()
+        optimizer.step()
+        if batch_idx % 1000 == 0:
+            print('Train Epoch: {} [{} / {} ({:.0f}%]\tLoss:{:.6f}'.format(
+                epoch, batch_idx * len(idx), train_item_count,
+                100. * batch_idx / math.ceil(int(train_item_count / BATCH_SIZE)), loss.item()))
 
 
 def get_idx_value_label(fname, feat_dict_, shuffle=True):
@@ -259,35 +265,39 @@ def get_idx_value_label(fname, feat_dict_, shuffle=True):
     cont_min_ = [0, -3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     cont_max_ = [5775, 257675, 65535, 969, 23159456, 431037, 56311, 6047, 29019, 46, 231, 4008, 7393]
     cont_diff_ = [cont_max_[i] - cont_min_[i] for i in range(len(cont_min_))]
-    features_idxs, features_values, labels = [], [], []
 
+    def _process_line(line):
+        features = line.rstrip('\n').split('\t')
+        feat_idx = []
+        feat_value = []
+
+        # MinMax标准化连续型数据
+        for idx in continuous_range_:
+            if features[idx] == '':
+                feat_idx.append(0)
+                feat_value.append(0.0)
+            else:
+                feat_idx.append(feat_dict_[idx])
+                feat_value.append((float(features[idx]) - cont_min_[idx - 1]) / cont_diff_[idx - 1])
+
+        # 处理分类型数据
+        for idx in categorical_range_:
+            if features[idx] == '' or features[idx] not in feat_dict_:
+                feat_idx.append(0)
+                feat_value.append(0.0)
+            else:
+                feat_idx.append(feat_dict_[features[idx]])
+                feat_value.append(1.0)
+
+        return feat_idx, feat_value, [int(features[0])]
+
+    features_idxs, features_values, labels = [], [], []
     with open(fname.strip(), 'r') as fin:
         for line in fin:
-            features = line.rstrip('\n').split('\t')
-            feat_idx = []
-            feat_value = []
-
-            # MinMax标准化连续型数据
-            for idx in continuous_range_:
-                if features[idx] == '':
-                    feat_idx.append(0)
-                    feat_value.append(0.0)
-                else:
-                    feat_idx.append(feat_dict_[idx])
-                    feat_value.append((float(features[idx]) - cont_min_[idx - 1]) / cont_diff_[idx - 1])
-
-            #
-            for idx in categorical_range_:
-                if features[idx] == '' or features[idx] not in feat_dict_:
-                    feat_idx.append(0)
-                    feat_value.append(0.0)
-                else:
-                    feat_idx.append(feat_dict_[features[idx]])
-                    feat_value.append(1.0)
-
+            feat_idx, feat_value, label = _process_line(line)
             features_idxs.append(feat_idx)
             features_values.append(feat_value)
-            labels.append([int(features[0])])
+            labels.append(label)
 
     features_idxs = np.array(features_idxs)
     features_values = np.array(features_values)
