@@ -17,7 +17,6 @@
     - 支持多分类预测
 - ##### FFM: Field-aware Factorization Machine
     - 论文链接: https://www.csie.ntu.edu.tw/~cjlin/papers/ffm.pdf
-DeepFM: 
     - 使用测试数据集: Movielens100K
     - 支持多分类预测
 - ##### DeepFM: Factorization-Machine based Neural Network
