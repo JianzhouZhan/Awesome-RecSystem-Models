@@ -24,27 +24,30 @@ class DCN_layer(nn.Module):
         self.num_dense_feat = num_dense_feat              # denote as D, 连续型特征数量
 
         # Embedding and Stacking Layer
-        embedding_sizes, sparse_feat_embeddings = [], []
+        embedding_sizes = []
+        self.sparse_feat_embeddings = nn.ModuleList()
+
+        # 对于每一列特征, 得到它所对应的Embedding的维度
         for i, num_sparse_feat in enumerate(num_sparse_feat_list):
-            embedding_size = min(num_sparse_feat, 6 * int(np.power(num_sparse_feat, 1/4)))
-            embedding_sizes.append(embedding_size)
-            feat_embedding = nn.Embedding(num_sparse_feat, embedding_size)
+            embedding_dim = min(num_sparse_feat, 6 * int(np.power(num_sparse_feat, 1/4)))
+            embedding_sizes.append(embedding_dim)
+            feat_embedding = nn.Embedding(num_sparse_feat, embedding_dim)
             nn.init.xavier_uniform_(feat_embedding.weight)
             feat_embedding.to(DEVICE)
-            sparse_feat_embeddings.append(feat_embedding)
-        self.embedding_sizes = embedding_sizes
-        self.sparse_feat_embeddings = sparse_feat_embeddings
+            self.sparse_feat_embeddings.append(feat_embedding)
 
-        self.num_sparse_field = len(num_sparse_feat_list)  # denote as F, 分类型特征field的数量
         self.num_cross_layers = num_cross_layers           # denote as C, Cross层的层数
         self.deep_layer_sizes = deep_layer_sizes           # Deep层中的各神经元的数量
 
         # Cross Network方面的参数
         self.input_dim = num_dense_feat + sum(embedding_sizes)   # denote as In
         self.cross_bias = nn.Parameter(torch.randn(num_cross_layers, self.input_dim))   # C * In
-        nn.init.xavier_uniform_(self.cross_bias)
+        nn.init.zeros_(self.cross_bias)
         self.cross_W = nn.Parameter(torch.randn(num_cross_layers, self.input_dim))
         nn.init.xavier_uniform_(self.cross_W)
+        self.batchNorm_list = nn.ModuleList()
+        for _ in range(num_cross_layers):
+            self.batchNorm_list.append(nn.BatchNorm1d(self.input_dim))
 
         # 神经网络方面的参数
         all_dims = [self.input_dim] + deep_layer_sizes
@@ -69,6 +72,7 @@ class DCN_layer(nn.Module):
             W = torch.unsqueeze(self.cross_W[i, :].T, dim=1)                  # In * 1
             xT_W = torch.mm(x_cross, W)                                       # None * 1
             x_cross = torch.mul(x0, xT_W) + self.cross_bias[i, :] + x_cross   # None * In
+            x_cross = self.batchNorm_list[i](x_cross)
 
         # Deep Network 部分
         x_deep = x0                                                           # None * In
@@ -105,7 +109,7 @@ def train_DeepFM_model_demo(device):
 
     # 下面的num_sparse_feat之所以还要加1个维度, 是因为缺失值的处理(详见数据处理过程)
     dcn = DCN_layer(reg_l2=1e-5, num_dense_feat=13, num_sparse_feat_list=num_sparse_feat_list,
-                    dropout_deep=[0, 0, 0], deep_layer_sizes=[1024, 1024],
+                    dropout_deep=[0.5, 0.5, 0.5], deep_layer_sizes=[1024, 1024],
                     num_cross_layers=6).to(DEVICE)
     print("Start Training DeepFM Model!")
 
@@ -247,24 +251,22 @@ def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer
             sparse_idx = sparse_idx.to(device)
             sparse_idx_list.append(sparse_idx)
 
-        # sparse_idx = torch.LongTensor([[int(x) for x in x_idx] for x_idx in batch_fea_idxs])
-        # sparse_idx = sparse_idx.to(device)
         dense_value = batch_fea_values.to(device, dtype=torch.float32)
         target = batch_labels.to(device, dtype=torch.float32)
         optimizer.zero_grad()
         output = model(sparse_idx_list, dense_value)
         loss = F.binary_cross_entropy_with_logits(output, target)
 
-        # regularization_loss = 0
-        # for param in model.parameters():
-        #     # regularization_loss += model.reg_l1 * torch.sum(torch.abs(param))
-        #     regularization_loss += model.reg_l2 * torch.sum(torch.pow(param, 2))
-        # loss += regularization_loss
+        regularization_loss = 0
+        for param in model.parameters():
+            # regularization_loss += model.reg_l1 * torch.sum(torch.abs(param))
+            regularization_loss += model.reg_l2 * torch.sum(torch.pow(param, 2))
+        loss += regularization_loss
 
         loss.backward()
         optimizer.step()
         if batch_idx % 1000 == 0:
-            print('Train Epoch: {} [{} / {} ({:.0f}%]\tLoss:{:.6f}'.format(
+            print('Train Epoch: {} [{} / {} ({:.0f})%]\tLoss:{:.6f}'.format(
                 epoch, batch_idx * len(sparse_idx), train_item_count,
                 100. * batch_idx / math.ceil(int(train_item_count / BATCH_SIZE)), loss.item()))
 
