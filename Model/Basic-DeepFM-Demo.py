@@ -7,7 +7,6 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score
-from data.Criteo.deepFM_dataProcess import EACH_FILE_DATA_NUM
 
 """
 Pytorch implementation of DeepFM[1]
@@ -127,21 +126,22 @@ def train_DeepFM_model_demo(device):
     optimizer = torch.optim.Adam(deepfm.parameters())
 
     # 计数train和test的数据量
-    train_item_count, test_item_count = 0, 0
-    for fname in train_filelist:
-        with open(fname.strip(), 'r') as fin:
-            for _ in fin:
-                train_item_count += 1
-
-    for fname in test_filelist:
-        with open(fname.strip(), 'r') as fin:
-            for _ in fin:
-                test_item_count += 1
+    train_item_count = get_in_filelist_item_num(train_filelist)
+    test_item_count = get_in_filelist_item_num(test_filelist)
 
     # 由于数据量过大, 如果使用pytorch的DataSet来自定义数据的话, 会耗时很久, 因此, 这里使用其它方式
     for epoch in range(1, EPOCHS + 1):
         train(deepfm, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch)
         test(deepfm, test_filelist, test_item_count, feat_dict_, device)
+
+
+def get_in_filelist_item_num(filelist):
+    count = 0
+    for fname in filelist:
+        with open(fname.strip(), 'r') as fin:
+            for _ in fin:
+                count += 1
+    return count
 
 
 def test(model, test_filelist, test_item_count, feat_dict_, device):
@@ -151,6 +151,7 @@ def test(model, test_filelist, test_item_count, feat_dict_, device):
     test_loss = 0
     with torch.no_grad():
         # 不断地取出数据进行计算
+        pre_file_data_count = 0  # 记录在前面已经访问的文件中的数据的数量
         for batch_idx in range(math.ceil(test_item_count / BATCH_SIZE)):
             # 取出当前Batch所在的数据的下标
             st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
@@ -160,31 +161,38 @@ def test(model, test_filelist, test_item_count, feat_dict_, device):
                 features_idxs, features_values, labels = get_idx_value_label(
                     test_filelist[fname_idx], feat_dict_, shuffle=False)
 
-            st_idx = st_idx - fname_idx * EACH_FILE_DATA_NUM
-            ed_idx = ed_idx - fname_idx * EACH_FILE_DATA_NUM
+            # 得到在现有文件中的所对应的起始位置及终止位置
+            st_idx -= pre_file_data_count
+            ed_idx -= pre_file_data_count
 
-            if ed_idx < EACH_FILE_DATA_NUM:
+            # 如果数据越过当前文件所对应的范围时, 则再读取下一个文件
+            if ed_idx <= len(features_idxs):
                 batch_fea_idxs = features_idxs[st_idx:ed_idx, :]
                 batch_fea_values = features_values[st_idx:ed_idx, :]
                 batch_labels = labels[st_idx:ed_idx, :]
             else:
-                batch_fea_idxs_part1 = features_idxs[st_idx:ed_idx, :]
-                batch_fea_values_part1 = features_values[st_idx:ed_idx, :]
-                batch_labels_part1 = labels[st_idx:ed_idx, :]
+                pre_file_data_count += len(features_idxs)
 
+                # 得到在这个文件内的数据
+                batch_fea_idxs_part1 = features_idxs[st_idx::, :]
+                batch_fea_values_part1 = features_values[st_idx::, :]
+                batch_labels_part1 = labels[st_idx::, :]
+
+                # 得到在下一个文件内的数据
                 fname_idx += 1
+                ed_idx -= len(features_idxs)
                 features_idxs, features_values, labels = get_idx_value_label(
                     test_filelist[fname_idx], feat_dict_, shuffle=False)
-                ed_idx = ed_idx - EACH_FILE_DATA_NUM
-
                 batch_fea_idxs_part2 = features_idxs[0:ed_idx, :]
                 batch_fea_values_part2 = features_values[0:ed_idx, :]
                 batch_labels_part2 = labels[0:ed_idx, :]
 
+                # 将两部分数据进行合并(正常情况下, 数据最多只会在两个文件中)
                 batch_fea_idxs = np.vstack((batch_fea_idxs_part1, batch_fea_idxs_part2))
                 batch_fea_values = np.vstack((batch_fea_values_part1, batch_fea_values_part2))
                 batch_labels = np.vstack((batch_labels_part1, batch_labels_part2))
 
+            # 进行格式转换
             batch_fea_values = torch.from_numpy(batch_fea_values)
             batch_labels = torch.from_numpy(batch_labels)
 
@@ -207,39 +215,48 @@ def test(model, test_filelist, test_item_count, feat_dict_, device):
 def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch):
     fname_idx = 0
     features_idxs, features_values, labels = None, None, None
+
     # 依顺序来遍历访问
+    pre_file_data_count = 0  # 记录在前面已经访问的文件中的数据的数量
     for batch_idx in range(math.ceil(train_item_count / BATCH_SIZE)):
-        # 得到当前Batch所在的数据的下标
+        # 得到当前Batch所要取的数据的起始及终止下标
         st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
         ed_idx = min(ed_idx, train_item_count - 1)
 
         if features_idxs is None:
             features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], feat_dict_)
 
-        st_idx = st_idx - fname_idx * EACH_FILE_DATA_NUM
-        ed_idx = ed_idx - fname_idx * EACH_FILE_DATA_NUM
+        # 得到在现有文件中的所对应的起始位置及终止位置
+        st_idx -= pre_file_data_count
+        ed_idx -= pre_file_data_count
 
-        if ed_idx < EACH_FILE_DATA_NUM:
+        # 如果数据越过当前文件所对应的范围时, 则再读取下一个文件
+        if ed_idx < len(features_idxs):
             batch_fea_idxs = features_idxs[st_idx:ed_idx, :]
             batch_fea_values = features_values[st_idx:ed_idx, :]
             batch_labels = labels[st_idx:ed_idx, :]
         else:
-            batch_fea_idxs_part1 = features_idxs[st_idx:ed_idx, :]
-            batch_fea_values_part1 = features_values[st_idx:ed_idx, :]
-            batch_labels_part1 = labels[st_idx:ed_idx, :]
+            pre_file_data_count += len(features_idxs)
 
+            # 得到在这个文件内的数据
+            batch_fea_idxs_part1 = features_idxs[st_idx::, :]
+            batch_fea_values_part1 = features_values[st_idx::, :]
+            batch_labels_part1 = labels[st_idx::, :]
+
+            # 得到在下一个文件内的数据
             fname_idx += 1
+            ed_idx -= len(features_idxs)
             features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], feat_dict_)
-            ed_idx = ed_idx - EACH_FILE_DATA_NUM
-
             batch_fea_idxs_part2 = features_idxs[0:ed_idx, :]
             batch_fea_values_part2 = features_values[0:ed_idx, :]
             batch_labels_part2 = labels[0:ed_idx, :]
 
+            # 将两部分数据进行合并(正常情况下, 数据最多只会在两个文件中)
             batch_fea_idxs = np.vstack((batch_fea_idxs_part1, batch_fea_idxs_part2))
             batch_fea_values = np.vstack((batch_fea_values_part1, batch_fea_values_part2))
             batch_labels = np.vstack((batch_labels_part1, batch_labels_part2))
 
+        # 进行格式转换
         batch_fea_values = torch.from_numpy(batch_fea_values)
         batch_labels = torch.from_numpy(batch_labels)
 
