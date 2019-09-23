@@ -14,21 +14,30 @@
 - ##### FM: Factorization Machine
     - 论文链接: https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf
     - 使用测试数据集: Movielens100K
-    - 支持多分类预测
+    - 支持多分类预测(论文没提供测试结果)
 - ##### FFM: Field-aware Factorization Machine
     - 论文链接: https://www.csie.ntu.edu.tw/~cjlin/papers/ffm.pdf
     - 使用测试数据集: Movielens100K
-    - 支持多分类预测
+    - 支持多分类预测(论文没提供测试结果)
 - ##### DeepFM: Factorization-Machine based Neural Network
     - 论文链接: https://www.ijcai.org/proceedings/2017/0239.pdf
     - 使用测试数据集: Criteo
     - 根据论文的方式将数据集按9:1分成训练集+测试集
-    - 先运行data/deepFM_dataProcess.py进行数据预处理, 再运行Model/Basic-DeepFM-Demo.py
+    - 先运行data/forDeepFM/deepFM_dataProcess.py进行数据预处理, 再运行Model/Basic-DeepFM-Demo.py
     - 经过3个Epoch训练之后, AUC可以达到0.795(略低于论文的效果)
 - ##### DCN: Deep&Cross Network
     - 论文链接: https://arxiv.org/pdf/1708.05123.pdf
     - 使用测试数据集: Criteo
     - 在处理数据集时, 仅简单地把数据按9:1分成训练集+测试集, 并没有按论文0.9:0.05:0.05的方式来划分
-    - 先运行data/DCN_dataProcess.py进行数据预处理, 再运行Model/Basic-DCN-Demo.py
-    - ###### 这里暂时还不能复现出论文的效果, 还不知是什么原因
+    - 先运行data/forDCN/DCN_dataProcess.py进行数据预处理, 再运行Model/Basic-DCN-Demo.py
+    - 经过5轮Epoch训练之后, AUC为0.795, LogLoss为 (略差于论文的效果), 相信经过更多轮训练的话, 效果会更好
+    
+|轮数|AUC|LogLoss|
+|-----|---|-------|
+|1Epoch|0.80157|0.45192|
+|2Epoch|0.80430|0.44922|
+|3Epoch|0.80546|0.44817|
+|4Epoch|0.80639|0.44729|
+|5Epoch|0.80696|0.44678|
+
     
