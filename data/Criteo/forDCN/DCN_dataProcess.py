@@ -51,8 +51,6 @@ def create_statfiles():
                        for _ in range(13)]  # count integer feature min max
     cat_ct_list = [Counter() for _ in range(26)]  # count categorical features
     for idx, line in enumerate(open(FILENAME)):
-        if idx >= 200000 * 20:
-            break
         spls = line.rstrip('\n').split('\t')
         assert len(spls) == 40
 
@@ -111,8 +109,6 @@ def split_data():
     fout = open(os.path.join(data_dir, 'part-0'), 'w')
     split_idx = int(45840617 * SPLIT_RATIO)
     for line_idx, line in enumerate(fin):
-        if line_idx >= 200000 * 20:
-            break
         if line_idx == split_idx:
             fout.close()
             data_dir = TEST_VALID_DIR
