@@ -9,12 +9,17 @@ import re
 
 EACH_FILE_DATA_NUM = 204800
 
+"""
+[1] PaddlePaddle implemantation of DeepFM for CTR prediction
+    https://github.com/PaddlePaddle/models/blob/develop/PaddleRec/ctr/deepfm/data/preprocess.py
+"""
+
 
 def get_raw_data():
     if not os.path.isdir('raw_data'):
         os.mkdir('raw_data')
     print(os.getcwd())
-    fin = open('train.txt', 'r')
+    fin = open('../train.txt', 'r')
     fout = open('raw_data/part-0', 'w')
     for line_idx, line in enumerate(fin):
         if line_idx >= EACH_FILE_DATA_NUM * 10:
@@ -62,14 +67,14 @@ def get_feat_dict():
         # print('generate a feature dict')
         # Count the number of occurrences of discrete features
         feat_cnt = Counter()
-        with open('train.txt', 'r') as fin:
+        with open('../train.txt', 'r') as fin:
             for line_idx, line in enumerate(fin):
                 if line_idx >= EACH_FILE_DATA_NUM * 10:
                     break
 
                 if line_idx % EACH_FILE_DATA_NUM == 0:
                     print('generating feature dict', line_idx / 45000000)
-                features = line.lstrip('\n').split('\t')
+                features = line.rstrip('\n').split('\t')
                 for idx in categorical_range_:
                     if features[idx] == '': continue
                     feat_cnt.update([features[idx]])
@@ -89,7 +94,7 @@ def get_feat_dict():
             tc += 1
         # Discrete features
         cnt_feat_set = set()
-        with open('train.txt', 'r') as fin:
+        with open('../train.txt', 'r') as fin:
             for line_idx, line in enumerate(fin):
                 if line_idx >= EACH_FILE_DATA_NUM * 10:
                     break
@@ -114,7 +119,7 @@ def get_feat_dict():
 """ ************************************************************************************ """
 def get_criteo_data(filelist):
     """
-    获取文件目录下的criteo数据集
+    获取文件目录下的Criteo数据集
     :param filelist:
     :return:
     """
@@ -228,7 +233,6 @@ class CriteoDataset(Dataset):
 
     def __len__(self):
         return self.item_count
-
 
 
 if __name__ == '__main__':
