@@ -8,6 +8,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score
 
+EPOCHS = 10
+BATCH_SIZE = 2048
+AID_DATA_DIR = '../data/Criteo/forDeepFM/'  # 辅助用途的文件路径
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 """
 Pytorch implementation of DeepFM[1]
 
@@ -19,11 +24,6 @@ Reference:
 [3] PaddlePaddle implemantation of DeepFM for CTR prediction
     https://github.com/PaddlePaddle/models/tree/develop/PaddleRec/ctr/deepfm
 """
-
-EPOCHS = 10
-BATCH_SIZE = 2048
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 class DeepFM(nn.Module):
     def __init__(self, num_feat, num_field, dropout_deep, dropout_fm,
@@ -106,15 +106,15 @@ def train_DeepFM_model_demo(device):
     训练DeepFM的方式
     :return:
     """
-    train_filelist = ["%s%s" % ('../data/Criteo/train_data/', x) for x in os.listdir('../data/Criteo/train_data/')]
-    test_filelist = ["%s%s" % ('../data/Criteo/test_data/', x) for x in os.listdir('../data/Criteo/test_data/')]
+    train_filelist = ["%s%s" % (AID_DATA_DIR + 'train_data/', x) for x in os.listdir(AID_DATA_DIR + 'train_data/')]
+    test_filelist = ["%s%s" % (AID_DATA_DIR + 'test_data/', x) for x in os.listdir(AID_DATA_DIR + 'test_data/')]
     train_file_id = [int(re.sub('[\D]', '', x)) for x in train_filelist]
     train_filelist = [train_filelist[idx] for idx in np.argsort(train_file_id)]
 
     test_file_id = [int(re.sub('[\D]', '', x)) for x in test_filelist]
     test_filelist = [test_filelist[idx] for idx in np.argsort(test_file_id)]
 
-    feat_dict_ = pickle.load(open('../data/Criteo/aid_data/feat_dict_10.pkl2', 'rb'))
+    feat_dict_ = pickle.load(open(AID_DATA_DIR + 'aid_data/feat_dict_10.pkl2', 'rb'))
 
     # 下面的num_feat的长度还需要考虑缺失值的处理而多了一个维度
     deepfm = DeepFM(num_feat=len(feat_dict_) + 1, num_field=39,

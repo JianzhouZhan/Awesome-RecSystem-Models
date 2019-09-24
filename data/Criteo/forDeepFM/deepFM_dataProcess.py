@@ -22,8 +22,9 @@ def get_raw_data():
     fin = open('../train.txt', 'r')
     fout = open('raw_data/part-0', 'w')
     for line_idx, line in enumerate(fin):
-        if line_idx >= EACH_FILE_DATA_NUM * 10:
-            break
+        # # 生成小样本, 用于测试算法
+        # if line_idx >= EACH_FILE_DATA_NUM * 10:
+        #     break
 
         if line_idx % EACH_FILE_DATA_NUM == 0 and line_idx != 0:
             fout.close()
@@ -69,8 +70,9 @@ def get_feat_dict():
         feat_cnt = Counter()
         with open('../train.txt', 'r') as fin:
             for line_idx, line in enumerate(fin):
-                if line_idx >= EACH_FILE_DATA_NUM * 10:
-                    break
+                # # 生成小样本, 用于测试算法
+                # if line_idx >= EACH_FILE_DATA_NUM * 10:
+                #     break
 
                 if line_idx % EACH_FILE_DATA_NUM == 0:
                     print('generating feature dict', line_idx / 45000000)
@@ -96,8 +98,9 @@ def get_feat_dict():
         cnt_feat_set = set()
         with open('../train.txt', 'r') as fin:
             for line_idx, line in enumerate(fin):
-                if line_idx >= EACH_FILE_DATA_NUM * 10:
-                    break
+                # # 生成小样本, 用于测试算法
+                # if line_idx >= EACH_FILE_DATA_NUM * 10:
+                #     break
 
                 features = line.rstrip('\n').split('\t')
                 for idx in categorical_range_:
