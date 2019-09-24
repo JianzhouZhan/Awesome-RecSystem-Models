@@ -14,7 +14,7 @@ AID_DATA_DIR = '../data/Criteo/forDeepFM/'  # 辅助用途的文件路径
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 """
-Pytorch implementation of DeepFM[1]
+PyTorch implementation of DeepFM[1]
 
 Reference:
 [1] DeepFM: A Factorization-Machine based Neural Network for CTR Prediction,

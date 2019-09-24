@@ -15,7 +15,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 """
-Pytorch implementation of Deep & Cross Network[1]
+PyTorch implementation of Deep & Cross Network[1]
 
 Reference:
 [1] Deep & Cross Network for Ad Click Predictions,
