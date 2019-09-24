@@ -39,8 +39,6 @@ class DeepFM(nn.Module):
         self.dropout_deep = dropout_deep
         self.dropout_fm = dropout_fm
 
-        # self.deep_layers_activation = deep_layers_activation
-
         # first order term parameters embedding
         self.first_weights = nn.Embedding(num_feat, 1)  # None * M * 1
         nn.init.xavier_uniform_(self.first_weights.weight.data)
@@ -267,8 +265,9 @@ def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer
         optimizer.zero_grad()
         output = model(idx, value)
         loss = F.binary_cross_entropy_with_logits(output, target)
-
         loss.backward()
+
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=100)
         optimizer.step()
         if batch_idx % 1000 == 0:
             print('Train Epoch: {} [{} / {} ({:.0f}%]\tLoss:{:.6f}'.format(
