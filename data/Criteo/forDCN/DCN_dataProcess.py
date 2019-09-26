@@ -7,6 +7,12 @@ import sys
 from collections import Counter
 
 """
+[1] PaddlePaddle implemantation of DCN for CTR prediction
+    https://github.com/PaddlePaddle/models/blob/develop/PaddleRec/ctr/dcn/data/preprocess.py
+"""
+
+
+"""
 preprocess Criteo train data, generate extra statistic files for model input.
 """
 # input filename

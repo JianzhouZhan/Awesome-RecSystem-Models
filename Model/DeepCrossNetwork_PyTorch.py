@@ -47,10 +47,10 @@ class DCN_layer(nn.Module):
             feat_embedding.to(DEVICE)
             self.sparse_feat_embeddings.append(feat_embedding)
 
-        self.num_cross_layers = num_cross_layers           # denote as C, Cross层的层数
-        self.deep_layer_sizes = deep_layer_sizes           # Deep层中的各神经元的数量
+        self.num_cross_layers = num_cross_layers           # denote as C, # of CrossLayers
+        self.deep_layer_sizes = deep_layer_sizes
 
-        # Cross Network方面的参数
+        # Cross Network
         self.input_dim = num_dense_feat + sum(embedding_sizes)   # denote as In
         self.cross_bias = nn.Parameter(torch.randn(num_cross_layers, self.input_dim))   # C * In
         nn.init.zeros_(self.cross_bias)
@@ -60,7 +60,7 @@ class DCN_layer(nn.Module):
         for _ in range(num_cross_layers):
             self.batchNorm_list.append(nn.BatchNorm1d(self.input_dim))
 
-        # 神经网络方面的参数
+        # Neural Network
         all_dims = [self.input_dim] + deep_layer_sizes
         for i in range(len(deep_layer_sizes)):
             setattr(self, 'linear_' + str(i + 1), nn.Linear(all_dims[i], all_dims[i + 1]))
@@ -77,7 +77,7 @@ class DCN_layer(nn.Module):
             sparse_x = self.sparse_feat_embeddings[i](feat_index)
             x0 = torch.cat((x0, sparse_x), dim=1)                             # None * In
 
-        # Cross Network 部分
+        # Cross Network Part
         x_cross = x0                                                          # None * In
         for i in range(self.num_cross_layers):
             W = torch.unsqueeze(self.cross_W[i, :].T, dim=1)                  # In * 1
@@ -85,7 +85,7 @@ class DCN_layer(nn.Module):
             x_cross = torch.mul(x0, xT_W) + self.cross_bias[i, :] + x_cross   # None * In
             x_cross = self.batchNorm_list[i](x_cross)
 
-        # Deep Network 部分
+        # Deep Network Part
         x_deep = x0                                                           # None * In
         for i in range(1, len(self.deep_layer_sizes) + 1):
             x_deep = getattr(self, 'linear_' + str(i))(x_deep)
@@ -181,8 +181,6 @@ def test(model, test_filelist, test_item_count, device, cat_feat_idx_dict_list):
             ed_idx = min(ed_idx, test_item_count - 1)
 
             if sparse_features_idxs is None:
-                # sparse_features_idxs, dense_features_values, labels = get_idx_value_label(
-                #     test_filelist[fname_idx], feat_dict_, shuffle=False)
                 sparse_features_idxs, dense_features_values, labels = new_get_idx_value_label(
                     test_filelist[fname_idx], cat_feat_idx_dict_list, shuffle=False)
 
@@ -202,8 +200,6 @@ def test(model, test_filelist, test_item_count, device, cat_feat_idx_dict_list):
 
                 ed_idx -= len(sparse_features_idxs)
                 fname_idx += 1
-                # sparse_features_idxs, dense_features_values, labels = get_idx_value_label(
-                #     test_filelist[fname_idx], feat_dict_, shuffle=False)
                 sparse_features_idxs, dense_features_values, labels = new_get_idx_value_label(
                     test_filelist[fname_idx], cat_feat_idx_dict_list, shuffle=False)
 
