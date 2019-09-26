@@ -35,6 +35,7 @@
     - Run data/forDCN/DCN_dataProcess.py to pre-porcess the data. According to the paper, the dataset is split by 9:0.5:0.5 for train, test and valid
     - Split the data set by 9:0.5:0.5 for train, test and valid
     - Run Model/DeepCrossNetwork_PyTorch.py, and the results are as follows:
+    
         |Epochs|AUC|LogLoss|
         |-----|---|-------|
         |1st|0.80157|0.45192|
