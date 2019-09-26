@@ -1,43 +1,48 @@
-# 基于PyTorch框架实现的推荐系统的经典模型
+# Implements of Awesome RecSystem Models with PyTorch
 
-### 1. 相关数据集
-- ##### Criteo数据集
-    - 整个数据集包含约4500W条记录. 每一行的第1列为Label, 表示点击与否, 
-然后接下来是13个整型特征(I1-I13)以及26个离散型特征(C1-C26)
-    - 数据集的下载链接为http://labs.criteo.com/2014/02/download-kaggle-display-advertising-challenge-dataset/
-    - 数据集下载后放置在data/Criteo/目录下
+
+### 1. Relative DataSet
+- ##### Criteo
+    - This dataset Contain about 45 million records. There are 13 features taking integer values (mostly count features)
+    and 26 categorical features.
+    - The columns are tab separated with the following sechema: <label><int feat 1>...<int feat 13><cate feat 1>...<cate feat26>
+    - The dataset is available at http://labs.criteo.com/2014/02/download-kaggle-display-advertising-challenge-dataset/
+    - Put the downloaded 'train.txt' file in 'data/Criteo/'
 - ##### Movielens100K
-    - movielens100k数据集 ，包含943个用户对于1682个影片超过10万条评分信息。推荐算法研究最常用的数据集
-    - 数据集包含 ua.base, ua.test, u.item, u.user 4个文件
-    - 由于数据集比较小, 这里直接提供放置在data/Movielens100K目录下了 
-### 1. 实现的模型:
+    - MovieLens 100K movie ratings. Stable benchmark dataset. 
+    - This dataset contain 100,000 ratings from 1000 users on 1700 movies.
+    - The details can be found at https://grouplens.org/datasets/movielens/100k/
+    - This dataset have been downloaded and is available at 'data/Movielens100K' 
+### 2. Implemented Models:
 - ##### FM: Factorization Machine
-    - 论文链接: https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf
-    - 使用测试数据集: Movielens100K
-    - 支持多分类预测(论文没提供测试结果)
+    - The paper is available at: https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf
+    - Tested dataset: Movielens100K
+    - Support Multi-Classification
 - ##### FFM: Field-aware Factorization Machine
-    - 论文链接: https://www.csie.ntu.edu.tw/~cjlin/papers/ffm.pdf
-    - 使用测试数据集: Movielens100K
-    - 支持多分类预测(论文没提供测试结果)
+    - The paper is available at: https://www.csie.ntu.edu.tw/~cjlin/papers/ffm.pdf
+    - Tested dataset: Movielens100K
+    - Support Multi-Classification
 - ##### DeepFM: Factorization-Machine based Neural Network
-    - 论文链接: https://www.ijcai.org/proceedings/2017/0239.pdf
-    - 使用测试数据集: Criteo
-    - 根据论文的方式将数据集按9:1分成训练集+测试集
-    - 先运行data/forDeepFM/deepFM_dataProcess.py进行数据预处理, 再运行Model/DeepFM_PyTorch.py
-    - 经过3个Epoch训练之后, AUC可以达到0.795(略低于论文的效果)
+    - The paper is available at: https://www.ijcai.org/proceedings/2017/0239.pdf
+    - Tested dataset: Criteo
+    - Split the data set by 9:1 for train and test.
+    - How To Run:
+    Run data/forDeepFM/deepFM_dataProcess.py to pre-porcess the data, then run Model/DeepFM_PyTorch.py
+    - After 3 Epoch, AUC: 0.795(The paper result is 0.801)
 - ##### DCN: Deep&Cross Network
-    - 论文链接: https://arxiv.org/pdf/1708.05123.pdf
-    - 使用测试数据集: Criteo
-    - 在处理数据集时, 仅简单地把数据按9:1分成训练集+测试集, 并没有按论文0.9:0.05:0.05的方式来划分
-    - 先运行data/forDCN/DCN_dataProcess.py进行数据预处理, 再运行Model/DeepCrossNetwork_PyTorch.py
-    - 经过5轮Epoch训练之后, AUC为0.795, LogLoss为 (略差于论文的效果), 相信经过更多轮训练的话, 效果会更好
-    
-|轮数|AUC|LogLoss|
-|-----|---|-------|
-|1Epoch|0.80157|0.45192|
-|2Epoch|0.80430|0.44922|
-|3Epoch|0.80546|0.44817|
-|4Epoch|0.80639|0.44729|
-|5Epoch|0.80696|0.44678|
-
+    - The paper is available at: https://arxiv.org/pdf/1708.05123.pdf
+    - Tested dataset: Criteo
+    - Run data/forDCN/DCN_dataProcess.py to pre-porcess the data. According to the paper, the dataset is split by 9:0.5:0.5 for train, test and valid
+    - Split the data set by 9:0.5:0.5 for train, test and valid
+    - Run Model/DeepCrossNetwork_PyTorch.py, and the results are as follows:
+        |Epochs|AUC|LogLoss|
+        |-----|---|-------|
+        |1st|0.80157|0.45192|
+        |2nd|0.80430|0.44922|
+        |3rd|0.80546|0.44817|
+        |4th|0.80639|0.44729|
+        |5th|0.80696|0.44678|
+- ##### xDeepFM: eXtreme Deep Factorization Machine
+    - The Paper is available at: https://arxiv.org/pdf/1803.05170.pdf
+    - Tested dataset: Criteo
     
