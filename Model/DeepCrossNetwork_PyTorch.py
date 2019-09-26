@@ -10,7 +10,7 @@ from time import time
 
 EPOCHS = 5
 BATCH_SIZE = 2048
-AID_DATA_DIR = '../data/Criteo/forDCN/'  # 辅助用途的文件路径
+AID_DATA_DIR = '../data/Criteo/forDCN/'
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -30,9 +30,9 @@ class DCN_layer(nn.Module):
     def __init__(self, num_dense_feat, num_sparse_feat_list, dropout_deep, deep_layer_sizes,
                  reg_l1=0.01, reg_l2=0.01, num_cross_layers=4):
         super(DCN_layer, self).__init__()
-        self.reg_l1 = reg_l1  # L1正则化并没有去使用
+        self.reg_l1 = reg_l1  # Warning: L1 Norm is not used
         self.reg_l2 = reg_l2
-        self.num_dense_feat = num_dense_feat              # denote as D, 连续型特征数量
+        self.num_dense_feat = num_dense_feat              # denote as D
 
         # Embedding and Stacking Layer
         embedding_sizes = []
@@ -121,31 +121,16 @@ def train_DeepFM_model_demo(device):
         cat_feat_num = line.rstrip().split(' ')
         num_sparse_feat_list.append(int(cat_feat_num[1]) + 1)
 
-    # num_sparse_feat_list = []
-    # with open(fname.strip(), 'r') as fin:
-    #     for line in fin:
-    #         cat_feat_num = line.rstrip().split(' ')
-    #         num_sparse_feat_list.append(int(cat_feat_num[1]) + 1)
-
-    # 下面的num_sparse_feat之所以还要加1个维度, 是因为缺失值的处理(详见数据处理过程)
     dcn = DCN_layer(reg_l2=1e-5, num_dense_feat=13, num_sparse_feat_list=num_sparse_feat_list,
                     dropout_deep=[0.5, 0.5, 0.5], deep_layer_sizes=[1024, 1024], num_cross_layers=6).to(DEVICE)
     print("Start Training DeepFM Model!")
 
-    # 定义损失函数还有优化器
+    # Use Adam for optimizer
     optimizer = torch.optim.Adam(dcn.parameters(), lr=1e-4)
 
     # 计数train和test的数据量
-    train_item_count, test_item_count = 0, 0
-    for fname in train_filelist:
-        with open(fname.strip(), 'r') as fin:
-            for _ in fin:
-                train_item_count += 1
-
-    for fname in test_filelist:
-        with open(fname.strip(), 'r') as fin:
-            for _ in fin:
-                test_item_count += 1
+    train_item_count = get_in_filelist_item_num(train_filelist)
+    test_item_count = get_in_filelist_item_num(test_filelist)
 
     # 由于数据量过大, 如果使用pytorch的DataSet来自定义数据的话, 会耗时很久, 因此, 这里使用其它方式
     cat_feat_idx_dict_list = [{} for _ in range(26)]
@@ -165,6 +150,15 @@ def train_DeepFM_model_demo(device):
         test(dcn1, test_filelist, test_item_count, device, cat_feat_idx_dict_list)
         print('The Time of Epoch: %.5f min' % float((toc - tic) / 60.0))
         print('The Test Time of Epoch: %.5f min' % float((time() - toc) / 60.0))
+
+
+def get_in_filelist_item_num(filelist):
+    count = 0
+    for fname in filelist:
+        with open(fname.strip(), 'r') as fin:
+            for _ in fin:
+                count += 1
+    return count
 
 
 def test(model, test_filelist, test_item_count, device, cat_feat_idx_dict_list):
@@ -245,8 +239,6 @@ def train(model, train_filelist, train_item_count, device, optimizer, epoch, cat
         ed_idx = min(ed_idx, train_item_count - 1)
 
         if sparse_features_idxs is None:
-            # sparse_features_idxs, dense_features_values, labels = get_idx_value_label(
-            #     train_filelist[fname_idx], feat_dict_)
             sparse_features_idxs, dense_features_values, labels = new_get_idx_value_label(
                 train_filelist[fname_idx], cat_feat_idx_dict_list, shuffle=True)
 
@@ -266,8 +258,6 @@ def train(model, train_filelist, train_item_count, device, optimizer, epoch, cat
 
             ed_idx -= len(sparse_features_idxs)
             fname_idx += 1
-            # sparse_features_idxs, dense_features_values, labels = get_idx_value_label(
-            #     train_filelist[fname_idx], feat_dict_)
             sparse_features_idxs, dense_features_values, labels = new_get_idx_value_label(
                 train_filelist[fname_idx], cat_feat_idx_dict_list, shuffle=True)
 
@@ -347,7 +337,7 @@ def new_get_idx_value_label(fname, cat_feat_idx_dict_list, shuffle=True):
     dense_features_values = np.array(dense_features_values)
     labels = np.array(labels).astype(np.int32)
 
-    # 进行shuffle
+    # Shuffle
     if shuffle:
         idx_list = np.arange(len(labels))
         np.random.shuffle(idx_list)
@@ -403,6 +393,7 @@ def get_idx_value_label(fname, feat_dict_, shuffle=True):
         dense_features_values = dense_features_values[idx_list, :]
         labels = labels[idx_list, :]
     return sparse_features_idxs, dense_features_values, labels
+
 
 if __name__ == '__main__':
     train_DeepFM_model_demo(DEVICE)
