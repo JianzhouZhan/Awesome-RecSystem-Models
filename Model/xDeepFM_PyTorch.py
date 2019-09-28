@@ -28,18 +28,20 @@ Reference:
 """
 
 class xDeepFM_layer(nn.Module):
-    def __init__(self, num_dense_feat, num_sparse_field, dropout_deep, deep_layer_sizes, cin_layer_sizes,
+    def __init__(self, num_feat, num_field, dropout_deep, deep_layer_sizes, cin_layer_sizes,
                  reg_l1=0.01, reg_l2=0.01, embedding_size=10):
         super(xDeepFM_layer, self).__init__()
-        self.num_dense_feat = num_dense_feat
-        self.num_sparse_field = num_sparse_field
-
+        self.reg_l1 = reg_l1
+        self.reg_l2 = reg_l2
+        self.num_field = num_field
         self.cin_layer_sizes = cin_layer_sizes
         self.deep_layer_sizes = deep_layer_sizes
 
-        self.input_dim = num_dense_feat + num_sparse_field * embedding_size
+        self.input_dim = num_feat * embedding_size
 
         #
+        feat_embedding = nn.Embedding((num_feat, embedding_size))
+        nn.init.xavier_uniform_(feat_embedding.weight)
 
         # Deep Part
         # Neural Network
