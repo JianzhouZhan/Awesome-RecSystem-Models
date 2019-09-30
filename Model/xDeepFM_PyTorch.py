@@ -8,11 +8,9 @@ import pickle
 import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score
 
-import torchfm
-from torchfm import layer
 
 EPOCHS = 5
-BATCH_SIZE = 1024
+BATCH_SIZE = 2048
 AID_DATA_DIR = '../data/Criteo/forXDeepFM/'
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -148,7 +146,7 @@ def train_xDeepFM_model_demo(device):
 
     # 下面的num_feat的长度还需要考虑缺失值的处理而多了一个维度
     xdeepfm = xDeepFM_layer(num_feat=len(feat_dict_) + 1, num_field=39, dropout_deep=[0, 0, 0],
-                            deep_layer_sizes=[400, 400], cin_layer_sizes=[200, 200, 200], embedding_size=10).to(DEVICE)
+                            deep_layer_sizes=[400, 400], cin_layer_sizes=[200, 200, 200], embedding_size=16).to(DEVICE)
     print("Start Training DeepFM Model!")
 
     # 定义损失函数还有优化器
