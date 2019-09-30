@@ -41,11 +41,11 @@ class DeepFM(nn.Module):
 
         # first order term parameters embedding
         self.first_weights = nn.Embedding(num_feat, 1)  # None * M * 1
-        nn.init.xavier_uniform_(self.first_weights.weight.data)
+        nn.init.xavier_uniform_(self.first_weights.weight)
 
         # 需要定义一个 Embedding
         self.feat_embeddings = nn.Embedding(num_feat, embedding_size)  # None * M * K
-        nn.init.xavier_uniform_(self.feat_embeddings.weight.data)
+        nn.init.xavier_uniform_(self.feat_embeddings.weight)
 
         # 神经网络方面的参数
         all_dims = [self.num_field * self.embedding_size] + layer_sizes
