@@ -32,7 +32,7 @@
 - ##### DCN: Deep&Cross Network
     - The paper is available at: https://arxiv.org/pdf/1708.05123.pdf
     - Tested dataset: Criteo
-    - Run data/forDCN/DCN_dataProcess.py to pre-porcess the data. According to the paper, the dataset is split by 9:0.5:0.5 for train, test and valid
+    - Run data/forDCN/DCN_dataProcess.py to pre-process the data. According to the paper, the dataset is split by 9:0.5:0.5 for train, test and valid
     - Split the data set by 9:0.5:0.5 for train, test and valid
     - Run Model/DeepCrossNetwork_PyTorch.py, and the results are as follows:
     
@@ -46,4 +46,8 @@
 - ##### xDeepFM: eXtreme Deep Factorization Machine
     - The Paper is available at: https://arxiv.org/pdf/1803.05170.pdf
     - Tested dataset: Criteo
+    - Run data/forXDeepFM/xDeepFM_dataProcess.py to pre-process the data. The pre-process of xDeepFM is identical with
+     that of DeepFM.
+    - Run Model/xDeepFM_PyTorch.py.
+    - After 4 epochs, the result is AUC 0.77002, LogLoss 0.47383 (This result still puzzles me. I don't know what happens).
     
