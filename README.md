@@ -3,13 +3,13 @@
 
 ### 1. Relative DataSet
 - ##### Criteo
-    - This dataset Contain about 45 million records. There are 13 features taking integer values (mostly count features)
+    - This dataset Contains about 45 million records. There are 13 features taking integer values (mostly count features)
     and 26 categorical features.
     - The columns are tab separated with the following sechema: <label><int feat 1>...<int feat 13><cate feat 1>...<cate feat26>
     - The dataset is available at http://labs.criteo.com/2014/02/download-kaggle-display-advertising-challenge-dataset/
-    - Put the downloaded 'train.txt' file in 'data/Criteo/'
+    - Put the downloaded 'train.txt' file in 'data/Criteo/' folder.
 - ##### Movielens100K
-    - MovieLens 100K movie ratings. Stable benchmark dataset. 
+    - MovieLens 100K movie ratings. Stable benchmark dataset for Recommendation System. 
     - This dataset contain 100,000 ratings from 1000 users on 1700 movies.
     - The details can be found at https://grouplens.org/datasets/movielens/100k/
     - This dataset have been downloaded and is available at 'data/Movielens100K' 
@@ -49,5 +49,5 @@
     - Run data/forXDeepFM/xDeepFM_dataProcess.py to pre-process the data. The pre-process of xDeepFM is identical with
      that of DeepFM.
     - Run Model/xDeepFM_PyTorch.py.
-    - After 4 epochs, the result is AUC 0.77002, LogLoss 0.47383 (This result still puzzles me. I don't know what happens).
+    - After 3 epochs, the result is AUC 0.77301, LogLoss 0.47154 (This result still puzzles me. I don't know what happens).
     
