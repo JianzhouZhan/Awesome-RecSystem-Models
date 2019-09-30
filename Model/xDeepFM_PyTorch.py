@@ -12,8 +12,8 @@ import torchfm
 from torchfm import layer
 
 EPOCHS = 5
-BATCH_SIZE = 256
-AID_DATA_DIR = '../data/Criteo/forDeepFM/'
+BATCH_SIZE = 1024
+AID_DATA_DIR = '../data/Criteo/forXDeepFM/'
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -32,9 +32,10 @@ Reference:
     https://github.com/qian135/ctr_model_zoo/blob/master/xdeepfm.py
 """
 
+
 class xDeepFM_layer(nn.Module):
     def __init__(self, num_feat, num_field, dropout_deep, deep_layer_sizes, cin_layer_sizes, split_half=True,
-                 reg_l1=0.01, reg_l2=1e-4, embedding_size=10):
+                 reg_l1=0.01, reg_l2=1e-5, embedding_size=10):
         super(xDeepFM_layer, self).__init__()
         self.reg_l1 = reg_l1
         self.reg_l2 = reg_l2
@@ -59,7 +60,9 @@ class xDeepFM_layer(nn.Module):
         prev_dim, fc_input_dim = self.num_field, 0
         self.conv1ds = nn.ModuleList()
         for k in range(1, len(cin_layer_dims)):
-            self.conv1ds.append(nn.Conv1d(cin_layer_dims[0] * prev_dim, cin_layer_dims[k], 1))
+            conv1d = nn.Conv1d(cin_layer_dims[0] * prev_dim, cin_layer_dims[k], 1)
+            nn.init.xavier_uniform_(conv1d.weight)
+            self.conv1ds.append(conv1d)
             if self.split_half and k != len(self.cin_layer_sizes):
                 prev_dim = cin_layer_dims[k] // 2
             else:
@@ -95,6 +98,7 @@ class xDeepFM_layer(nn.Module):
             z_k = torch.einsum('bhd,bmd->bhmd', x_list[-1], x_list[0])
             z_k = z_k.reshape(x0.shape[0], x_list[-1].shape[1] * x0.shape[1], x0.shape[2])
             x_k = self.conv1ds[k - 1](z_k)
+            x_k = torch.relu(x_k)
 
             if self.split_half and k != len(self.cin_layer_sizes):
                 # x, h = torch.split(x, x.shape[1] // 2, dim=1)
@@ -143,12 +147,12 @@ def train_xDeepFM_model_demo(device):
     feat_dict_ = pickle.load(open(AID_DATA_DIR + 'aid_data/feat_dict_10.pkl2', 'rb'))
 
     # 下面的num_feat的长度还需要考虑缺失值的处理而多了一个维度
-    deepfm = xDeepFM_layer(num_feat=len(feat_dict_) + 1, num_field=39, dropout_deep=[0, 0, 0, 0, 0],
-                           deep_layer_sizes=[400, 400, 400, 400], cin_layer_sizes=[100, 100, 50], embedding_size=10).to(DEVICE)
+    xdeepfm = xDeepFM_layer(num_feat=len(feat_dict_) + 1, num_field=39, dropout_deep=[0, 0, 0],
+                            deep_layer_sizes=[400, 400], cin_layer_sizes=[200, 200, 200], embedding_size=10).to(DEVICE)
     print("Start Training DeepFM Model!")
 
     # 定义损失函数还有优化器
-    optimizer = torch.optim.Adam(deepfm.parameters())
+    optimizer = torch.optim.Adam(xdeepfm.parameters())
 
     # 计数train和test的数据量
     train_item_count = get_in_filelist_item_num(train_filelist)
@@ -156,8 +160,8 @@ def train_xDeepFM_model_demo(device):
 
     # 由于数据量过大, 如果使用pytorch的DataSet来自定义数据的话, 会耗时很久, 因此, 这里使用其它方式
     for epoch in range(1, EPOCHS + 1):
-        train(deepfm, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch)
-        test(deepfm, test_filelist, test_item_count, feat_dict_, device)
+        train(xdeepfm, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch)
+        test(xdeepfm, test_filelist, test_item_count, feat_dict_, device)
 
 
 def get_in_filelist_item_num(filelist):
@@ -304,12 +308,12 @@ def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=100)
         optimizer.step()
         if batch_idx % 1000 == 0:
-            print('Train Epoch: {} [{} / {} ({:.0f}%]\tLoss:{:.6f}'.format(
+            print('Train Epoch: {} [{} / {} ({:.0f}%)]\tLoss:{:.6f}'.format(
                 epoch, batch_idx * len(idx), train_item_count,
                 100. * batch_idx / math.ceil(int(train_item_count / BATCH_SIZE)), loss.item()))
 
 
-def get_idx_value_label(fname, feat_dict_, use_log_transform=False, shuffle=True):
+def get_idx_value_label(fname, feat_dict_, use_log_transform=True, shuffle=True):
     continuous_range_ = range(1, 14)
     categorical_range_ = range(14, 40)
     cont_min_ = [0, -3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
