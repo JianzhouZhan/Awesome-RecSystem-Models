@@ -49,7 +49,7 @@
     - Run data/forXDeepFM/xDeepFM_dataProcess.py to pre-process the data. The pre-process of xDeepFM is identical with
      that of DeepFM.
     - Run Model/xDeepFM_PyTorch.py.
-    - After 5 epochs, the result is AUC 0.77324, LogLoss 0.47140 (This result still puzzles me. I don't know what happens).
+    - After 5 epochs, the result is AUC 0.80148, LogLoss 0.45104 (The paper result is AUC 0.8052).
 - ##### PNN: Product-based Neural Network
     - Paper: https://arxiv.org/pdf/1611.00144.pdf
     - Tested dataset: Criteo
