@@ -46,6 +46,7 @@
 - ##### xDeepFM: eXtreme Deep Factorization Machine
     - The Paper is available at: https://arxiv.org/pdf/1803.05170.pdf
     - Tested dataset: Criteo
+    - Split the data set by 9:1 for train and test.
     - Run data/forXDeepFM/xDeepFM_dataProcess.py to pre-process the data. The pre-process of xDeepFM is identical with
      that of DeepFM.
     - Run Model/xDeepFM_PyTorch.py.
