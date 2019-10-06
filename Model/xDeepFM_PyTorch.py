@@ -142,11 +142,12 @@ def train_xDeepFM_model_demo(device):
     test_file_id = [int(re.sub('[\D]', '', x)) for x in test_filelist]
     test_filelist = [test_filelist[idx] for idx in np.argsort(test_file_id)]
 
-    feat_dict_ = pickle.load(open(AID_DATA_DIR + 'aid_data/feat_dict_10.pkl2', 'rb'))
+    featIndex = pickle.load(open(AID_DATA_DIR + 'aid_data/feat_dict_4.pkl2', 'rb'))
+    feat_cnt = pickle.load(open(AID_DATA_DIR + 'aid_data/feat_cnt_4.pkl2', 'rb'))
 
     # 下面的num_feat的长度还需要考虑缺失值的处理而多了一个维度
-    xdeepfm = xDeepFM_layer(num_feat=len(feat_dict_) + 1, num_field=39, dropout_deep=[0, 0, 0],
-                            deep_layer_sizes=[400, 400], cin_layer_sizes=[200, 200, 200], embedding_size=16).to(DEVICE)
+    xdeepfm = xDeepFM_layer(num_feat=len(featIndex) + 1, num_field=39, dropout_deep=[0, 0, 0, 0, 0],
+                            deep_layer_sizes=[400, 400, 400, 400], cin_layer_sizes=[100, 100, 50], embedding_size=16).to(DEVICE)
     print("Start Training DeepFM Model!")
 
     # 定义损失函数还有优化器
@@ -158,8 +159,8 @@ def train_xDeepFM_model_demo(device):
 
     # 由于数据量过大, 如果使用pytorch的DataSet来自定义数据的话, 会耗时很久, 因此, 这里使用其它方式
     for epoch in range(1, EPOCHS + 1):
-        train(xdeepfm, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch)
-        test(xdeepfm, test_filelist, test_item_count, feat_dict_, device)
+        train(xdeepfm, train_filelist, train_item_count, featIndex, feat_cnt, device, optimizer, epoch)
+        test(xdeepfm, test_filelist, test_item_count, featIndex, feat_cnt, device)
 
 
 def get_in_filelist_item_num(filelist):
@@ -171,7 +172,7 @@ def get_in_filelist_item_num(filelist):
     return count
 
 
-def test(model, test_filelist, test_item_count, feat_dict_, device):
+def test(model, test_filelist, test_item_count, featIndex, feat_cnt, device):
     fname_idx = 0
     pred_y, true_y = [], []
     features_idxs, features_values, labels = None, None, None
@@ -186,7 +187,7 @@ def test(model, test_filelist, test_item_count, feat_dict_, device):
 
             if features_idxs is None:
                 features_idxs, features_values, labels = get_idx_value_label(
-                    test_filelist[fname_idx], feat_dict_, shuffle=False)
+                    test_filelist[fname_idx], featIndex, feat_cnt, shuffle=False)
 
             # 得到在现有文件中的所对应的起始位置及终止位置
             st_idx -= pre_file_data_count
@@ -209,7 +210,7 @@ def test(model, test_filelist, test_item_count, feat_dict_, device):
                 fname_idx += 1
                 ed_idx -= len(features_idxs)
                 features_idxs, features_values, labels = get_idx_value_label(
-                    test_filelist[fname_idx], feat_dict_, shuffle=False)
+                    test_filelist[fname_idx], featIndex, feat_cnt, shuffle=False)
                 batch_fea_idxs_part2 = features_idxs[0:ed_idx, :]
                 batch_fea_values_part2 = features_values[0:ed_idx, :]
                 batch_labels_part2 = labels[0:ed_idx, :]
@@ -239,7 +240,7 @@ def test(model, test_filelist, test_item_count, feat_dict_, device):
         print('Test set: Average loss: {:.5f}'.format(test_loss))
 
 
-def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch):
+def train(model, train_filelist, train_item_count, featIndex, feat_cnt, device, optimizer, epoch):
     fname_idx = 0
     features_idxs, features_values, labels = None, None, None
 
@@ -251,7 +252,7 @@ def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer
         ed_idx = min(ed_idx, train_item_count - 1)
 
         if features_idxs is None:
-            features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], feat_dict_)
+            features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], featIndex, feat_cnt)
 
         # 得到在现有文件中的所对应的起始位置及终止位置
         st_idx -= pre_file_data_count
@@ -273,7 +274,7 @@ def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer
             # 得到在下一个文件内的数据
             fname_idx += 1
             ed_idx -= len(features_idxs)
-            features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], feat_dict_)
+            features_idxs, features_values, labels = get_idx_value_label(train_filelist[fname_idx], featIndex, feat_cnt)
             batch_fea_idxs_part2 = features_idxs[0:ed_idx, :]
             batch_fea_values_part2 = features_values[0:ed_idx, :]
             batch_labels_part2 = labels[0:ed_idx, :]
@@ -311,39 +312,47 @@ def train(model, train_filelist, train_item_count, feat_dict_, device, optimizer
                 100. * batch_idx / math.ceil(int(train_item_count / BATCH_SIZE)), loss.item()))
 
 
-def get_idx_value_label(fname, feat_dict_, use_log_transform=True, shuffle=True):
+def get_idx_value_label(fname, featIndex, feat_cnt, shuffle=True):
     continuous_range_ = range(1, 14)
     categorical_range_ = range(14, 40)
-    cont_min_ = [0, -3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    cont_max_ = [5775, 257675, 65535, 969, 23159456, 431037, 56311, 6047, 29019, 46, 231, 4008, 7393]
-    cont_diff_ = [cont_max_[i] - cont_min_[i] for i in range(len(cont_min_))]
 
     def _process_line(line):
         features = line.rstrip('\n').split('\t')
         feat_idx = []
         feat_value = []
 
-        # MinMax标准化连续型数据
         for idx in continuous_range_:
-            if features[idx] == '':
-                feat_idx.append(0)
-                feat_value.append(0.0)
+            key = 'I' + str(idx)
+            val = features[idx]
+
+            if val == '':
+                feat = str(key) + '#' + 'absence'
             else:
-                feat_idx.append(feat_dict_[idx])
-                if use_log_transform:
-                    feat_value.append(math.log(4 + float(features[idx])) if idx == 2 else math.log(1 + float(features[idx])))
+                val = int(float(val))
+                if val > 2:
+                    val = int(math.log(float(val)) ** 2)
                 else:
-                    feat_value.append((float(features[idx]) - cont_min_[idx - 1]) / cont_diff_[idx - 1])
+                    val = 'SP' + str(val)
+                feat = str(key) + '#' + str(val)
 
-        # 处理分类型数据
+            feat_idx.append(featIndex[feat])
+            feat_value.append(1)
+
         for idx in categorical_range_:
-            if features[idx] == '' or features[idx] not in feat_dict_:
-                feat_idx.append(0)
-                feat_value.append(0.0)
-            else:
-                feat_idx.append(feat_dict_[features[idx]])
-                feat_value.append(1.0)
+            key = 'C' + str(idx - 13)
+            val = features[idx]
 
+            if val == '':
+                feat = str(key) + '#' + 'absence'
+            else:
+                feat = str(key) + '#' + str(val)
+            if feat_cnt[feat] > 4:
+                feat = feat
+            else:
+                feat = str(key) + '#' + str(feat_cnt[feat])
+
+            feat_idx.append(featIndex[feat])
+            feat_value.append(1)
         return feat_idx, feat_value, [int(features[0])]
 
     features_idxs, features_values, labels = [], [], []
@@ -367,6 +376,7 @@ def get_idx_value_label(fname, feat_dict_, use_log_transform=True, shuffle=True)
         features_values = features_values[idx_list, :]
         labels = labels[idx_list, :]
     return features_idxs, features_values, labels
+
 
 if __name__ == '__main__':
     train_xDeepFM_model_demo(DEVICE)
