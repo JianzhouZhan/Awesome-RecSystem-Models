@@ -2,12 +2,9 @@ import os
 import numpy
 import shutil
 import pickle
-import numpy as np
-from collections import Counter
-from torch.utils.data import Dataset
-import re
 import pandas as pd
-import sys, csv, math
+import csv
+import math
 from collections import defaultdict
 
 EACH_FILE_DATA_NUM = 204800
