@@ -6,6 +6,9 @@ import numpy as np
 from collections import Counter
 from torch.utils.data import Dataset
 import re
+import pandas as pd
+import sys, csv, math
+from collections import defaultdict
 
 EACH_FILE_DATA_NUM = 204800
 
@@ -23,8 +26,8 @@ def get_raw_data():
     fout = open('raw_data/part-0', 'w')
     for line_idx, line in enumerate(fin):
         # get mini-sample for test
-        if line_idx >= EACH_FILE_DATA_NUM * 20:
-            break
+        # if line_idx >= EACH_FILE_DATA_NUM * 20:
+        #     break
 
         if line_idx % EACH_FILE_DATA_NUM == 0 and line_idx != 0:
             fout.close()
@@ -58,66 +61,64 @@ def split_data():
             shutil.move(filelist_[idx], 'test_data')
 
 
-def get_feat_dict():
-    freq_ = 4
-    dir_feat_dict_ = 'aid_data/feat_dict_' + str(freq_) + '.pkl2'
-    continuous_range_ = range(1, 14)
-    categorical_range_ = range(14, 40)
+def scan_train_txt(filename):
+    feat_cnt = defaultdict(lambda: 0)
+    count = 0
+    for row in csv.DictReader(open(filename)):
+        count += 1
+        # if count >= EACH_FILE_DATA_NUM * 20:
+        #     break
+        for key, val in row.items():
+            if 'C' in key:
+                if val == '':
+                    feat_cnt[str(key) + '#' + 'absence'] += 1
+                else:
+                    feat_cnt[str(key) + '#' + str(val)] += 1
+    return feat_cnt
 
-    if not os.path.exists(dir_feat_dict_):
-        # print('generate a feature dict')
-        # Count the number of occurrences of discrete features
-        feat_cnt = Counter()
-        with open('../train.txt', 'r') as fin:
-            for line_idx, line in enumerate(fin):
-                # for test
-                if line_idx >= EACH_FILE_DATA_NUM * 20:
-                    break
 
-                if line_idx % EACH_FILE_DATA_NUM == 0:
-                    print('generating feature dict', line_idx / 45000000)
-                features = line.rstrip('\n').split('\t')
-                for idx in categorical_range_:
-                    if features[idx] == '': continue
-                    feat_cnt.update([features[idx]])
+def get_feat(filename, feat_cnt):
+    T = 4
+    featSet = set()
+    count = 0
+    for row in csv.DictReader(open(filename)):
+        count += 1
+        if count % EACH_FILE_DATA_NUM == 0:
+            print('generating feature dict', count / 45000000)
 
-        # Only retain discrete features with high frequency
-        dis_feat_set = set()
-        for feat, ot in feat_cnt.items():
-            if ot >= freq_:
-                dis_feat_set.add(feat)
+        for key, val in row.items():
+            if 'I' in key and key != "Id":
+                if val == '':
+                    featSet.add(str(key) + '#' + 'absence')
+                else:
+                    val = int(float(val))
+                    if val > 2:
+                        val = int(math.log(float(val)) ** 2)
+                    else:
+                        val = 'SP' + str(val)
+                    featSet.add(str(key) + '#' + str(val))
+                continue
+            if 'C' in key:
+                if val == '':
+                    feat = str(key) + '#' + 'absence'
+                else:
+                    feat = str(key) + '#' + str(val)
+                if feat_cnt[feat] > T:
+                    featSet.add(feat)
+                else:
+                    featSet.add(str(key) + '#' + str(feat_cnt[feat]))
+                continue
 
-        # Create a dictionary for continuous and discrete features
-        feat_dict = {}
-        tc = 1
-        # Continuous features
-        for idx in continuous_range_:
-            feat_dict[idx] = tc
-            tc += 1
-        # Discrete features
-        cnt_feat_set = set()
-        with open('../train.txt', 'r') as fin:
-            for line_idx, line in enumerate(fin):
-                # get mini-sample for test
-                if line_idx >= EACH_FILE_DATA_NUM * 20:
-                    break
+    featIndex = dict()
+    for index, feat in enumerate(featSet, start=1):
+        featIndex[feat] = index
+    print('feat dict num:', len(featIndex))
 
-                features = line.rstrip('\n').split('\t')
-                for idx in categorical_range_:
-                    if features[idx] == '' or features[idx] not in dis_feat_set:
-                        continue
-                    if features[idx] not in cnt_feat_set:
-                        cnt_feat_set.add(features[idx])
-                        feat_dict[features[idx]] = tc
-                        tc += 1
-
-        # Save dictionary
-        with open(dir_feat_dict_, 'wb') as fout:
-            pickle.dump(feat_dict, fout)
-        print('args.num_feat ', len(feat_dict) + 1)
+    return featIndex
 
 
 if __name__ == '__main__':
+    train_csv_file = '../input.csv'
     if not os.path.isdir('train_data'):
         os.mkdir('train_data')
     if not os.path.isdir('test_data'):
@@ -127,7 +128,32 @@ if __name__ == '__main__':
 
     get_raw_data()
     split_data()
-    get_feat_dict()
 
+    reader = pd.read_csv('../train.txt', delimiter='\t', header=None, chunksize=1024 * 1024)
+    for idx, r in enumerate(reader):
+        if idx == 0:
+            r.columns = ['Label', 'I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12', 'I13',
+                         'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14',
+                         'C15', 'C16', 'C17', 'C18', 'C19', 'C20', 'C21', 'C22', 'C23', 'C24', 'C25', 'C26']
+            r.to_csv(train_csv_file, mode='a', header=True, index=False)
+        else:
+            r.to_csv(train_csv_file, mode='a', header=False, index=False)
+
+    feat_cnt = scan_train_txt(train_csv_file)
+    featIndex = get_feat(train_csv_file, feat_cnt)
+
+    # Save dictionary
+    freq_ = 4
+    dir_feat_dict_ = 'aid_data/feat_dict_' + str(freq_) + '.pkl2'
+    with open(dir_feat_dict_, 'wb') as fout:
+        pickle.dump(featIndex, fout)
+
+    feat_cnt_dict_ = 'aid_data/feat_cnt_' + str(freq_) + '.pkl2'
+    feat_cnt_dict = {}
+    for k, v in feat_cnt.items():
+        feat_cnt_dict[k] = v
+    with open(feat_cnt_dict_, 'wb') as fout:
+        pickle.dump(feat_cnt_dict, fout)
+    print('args.num_feat ', len(featIndex) + 1)
     print('Done!')
 
