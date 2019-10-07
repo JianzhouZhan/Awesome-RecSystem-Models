@@ -7,7 +7,7 @@ def get_batch_loader(features, labels, batch_size, shuffle=True):
             self.features = features
             self.labels = labels
 
-        def __getitem__(self, index):  # 返回的是tensor
+        def __getitem__(self, index):  # tensor
             row_data, target = self.features[index], self.labels[index]
             return row_data, target
 
