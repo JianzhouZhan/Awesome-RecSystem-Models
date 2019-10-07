@@ -1,10 +1,5 @@
 from data.Criteo.util import *
 
-"""
-[1] PaddlePaddle implementation of DeepFM for CTR prediction
-    https://github.com/PaddlePaddle/models/blob/develop/PaddleRec/ctr/deepfm/data/preprocess.py
-"""
-
 if __name__ == '__main__':
     if not os.path.isdir('train_data'):
         os.mkdir('train_data')
