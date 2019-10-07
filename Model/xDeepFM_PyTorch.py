@@ -127,7 +127,7 @@ class xDeepFM_layer(nn.Module):
 
 
 """ ************************************************************************************ """
-"""                                     训练和测试FM模型                                   """
+"""                                   训练和测试xDeepFM模型                                """
 """ ************************************************************************************ """
 def train_xDeepFM_model_demo(device):
     """
@@ -240,7 +240,7 @@ def test(model, test_filelist, test_item_count, featIndex, feat_cnt, device):
         print('Test set: Average loss: {:.5f}'.format(test_loss))
 
 
-def train(model, train_filelist, train_item_count, featIndex, feat_cnt, device, optimizer, epoch):
+def train(model, train_filelist, train_item_count, featIndex, feat_cnt, device, optimizer, epoch, use_reg_l2=True):
     fname_idx = 0
     features_idxs, features_values, labels = None, None, None
 
@@ -296,11 +296,12 @@ def train(model, train_filelist, train_item_count, featIndex, feat_cnt, device, 
         output = model(idx, value)
         loss = F.binary_cross_entropy_with_logits(output, target)
 
-        regularization_loss = 0
-        for param in model.parameters():
-            # regularization_loss += model.reg_l1 * torch.sum(torch.abs(param))
-            regularization_loss += model.reg_l2 * torch.sum(torch.pow(param, 2))
-        loss += regularization_loss
+        if use_reg_l2:
+            regularization_loss = 0
+            for param in model.parameters():
+                # regularization_loss += model.reg_l1 * torch.sum(torch.abs(param))
+                regularization_loss += model.reg_l2 * torch.sum(torch.pow(param, 2))
+            loss += regularization_loss
 
         loss.backward()
 

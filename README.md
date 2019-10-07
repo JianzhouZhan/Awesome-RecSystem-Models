@@ -54,4 +54,6 @@
 - ##### PNN: Product-based Neural Network
     - Paper: https://arxiv.org/pdf/1611.00144.pdf
     - Tested dataset: Criteo
+    - After 3 epochs, the result of IPNN is AUC: 0.76585 Test set: Average loss: 0.47766
+    - After 3 epochs, the result of OPNN is AUC: 0.76592 Test set: Average loss: 0.47748
     

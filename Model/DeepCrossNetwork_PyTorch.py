@@ -175,7 +175,7 @@ def test(model, test_filelist, test_item_count, device, cat_feat_idx_dict_list):
             ed_idx = min(ed_idx, test_item_count - 1)
 
             if sparse_features_idxs is None:
-                sparse_features_idxs, dense_features_values, labels = new_get_idx_value_label(
+                sparse_features_idxs, dense_features_values, labels = get_idx_value_label(
                     test_filelist[fname_idx], cat_feat_idx_dict_list, shuffle=False)
 
             st_idx -= pre_file_data_count
@@ -194,7 +194,7 @@ def test(model, test_filelist, test_item_count, device, cat_feat_idx_dict_list):
 
                 ed_idx -= len(sparse_features_idxs)
                 fname_idx += 1
-                sparse_features_idxs, dense_features_values, labels = new_get_idx_value_label(
+                sparse_features_idxs, dense_features_values, labels = get_idx_value_label(
                     test_filelist[fname_idx], cat_feat_idx_dict_list, shuffle=False)
 
                 batch_fea_idxs_part2 = sparse_features_idxs[0:ed_idx, :]
@@ -239,7 +239,7 @@ def train(model, train_filelist, train_item_count, device, optimizer, epoch, cat
         ed_idx = min(ed_idx, train_item_count - 1)
 
         if sparse_features_idxs is None:
-            sparse_features_idxs, dense_features_values, labels = new_get_idx_value_label(
+            sparse_features_idxs, dense_features_values, labels = get_idx_value_label(
                 train_filelist[fname_idx], cat_feat_idx_dict_list, shuffle=True)
 
         st_idx -= pre_file_data_count
@@ -258,7 +258,7 @@ def train(model, train_filelist, train_item_count, device, optimizer, epoch, cat
 
             ed_idx -= len(sparse_features_idxs)
             fname_idx += 1
-            sparse_features_idxs, dense_features_values, labels = new_get_idx_value_label(
+            sparse_features_idxs, dense_features_values, labels = get_idx_value_label(
                 train_filelist[fname_idx], cat_feat_idx_dict_list, shuffle=True)
 
             batch_fea_idxs_part2 = sparse_features_idxs[0:ed_idx, :]
@@ -300,7 +300,7 @@ def train(model, train_filelist, train_item_count, device, optimizer, epoch, cat
                 100. * batch_idx / math.ceil(int(train_item_count / BATCH_SIZE)), loss.item()))
 
 
-def new_get_idx_value_label(fname, cat_feat_idx_dict_list, shuffle=True):
+def get_idx_value_label(fname, cat_feat_idx_dict_list, shuffle=True):
     cont_idx_ = list(range(1, 14))
     cat_idx_ = list(range(14, 40))
 
@@ -338,54 +338,6 @@ def new_get_idx_value_label(fname, cat_feat_idx_dict_list, shuffle=True):
     labels = np.array(labels).astype(np.int32)
 
     # Shuffle
-    if shuffle:
-        idx_list = np.arange(len(labels))
-        np.random.shuffle(idx_list)
-        sparse_features_idxs = sparse_features_idxs[idx_list, :]
-        dense_features_values = dense_features_values[idx_list, :]
-        labels = labels[idx_list, :]
-    return sparse_features_idxs, dense_features_values, labels
-
-
-def get_idx_value_label(fname, feat_dict_, shuffle=True):
-    continuous_range_ = range(1, 14)
-    categorical_range_ = range(14, 40)
-
-    def _process_line(line):
-        features = line.rstrip('\n').split('\t')
-        sparse_feat_idx = []
-        dense_feat_value = []
-
-        # 对于连续型数据, 根据kaggle Winner的做法, 使用取Log处理
-        for idx in continuous_range_:
-            if features[idx] == '':
-                dense_feat_value.append(0.0)
-            else:
-                fea_value = math.log(4 + float(features[idx])) if idx == 2 else math.log(1 + float(features[idx]))
-                dense_feat_value.append(fea_value)
-
-        # 处理分类型数据, 由于DCN使用Embedding的方式处理, 并不需要value的值, 因此, 仅需要返回Embedding所对应的index即可
-        for idx in categorical_range_:
-            if features[idx] == '' or features[idx] not in feat_dict_['C' + str(idx)]:
-                sparse_feat_idx.append(0)
-            else:
-                sparse_feat_idx.append(feat_dict_['C' + str(idx)][features[idx]])
-
-        return sparse_feat_idx, dense_feat_value, [int(features[0])]
-
-    sparse_features_idxs, dense_features_values, labels = [], [], []
-    with open(fname.strip(), 'r') as fin:
-        for line in fin:
-            sparse_feat_idx, dense_feat_value, label = _process_line(line)
-            sparse_features_idxs.append(sparse_feat_idx)
-            dense_features_values.append(dense_feat_value)
-            labels.append(label)
-
-    sparse_features_idxs = np.array(sparse_features_idxs)
-    dense_features_values = np.array(dense_features_values)
-    labels = np.array(labels).astype(np.int32)
-
-    # 进行shuffle
     if shuffle:
         idx_list = np.arange(len(labels))
         np.random.shuffle(idx_list)

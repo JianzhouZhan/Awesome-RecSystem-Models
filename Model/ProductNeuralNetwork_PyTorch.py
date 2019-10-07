@@ -10,7 +10,7 @@ from sklearn.metrics import roc_auc_score
 
 EPOCHS = 10
 BATCH_SIZE = 2048
-AID_DATA_DIR = '../data/Criteo/forDeepFM/'  # 辅助用途的文件路径
+AID_DATA_DIR = '../data/Criteo/forPNN/'  # 辅助用途的文件路径
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 """
@@ -97,11 +97,11 @@ class PNN_layer(nn.Module):
 
 
 """ ************************************************************************************ """
-"""                                     训练和测试FM模型                                   """
+"""                                     训练和测试PNN模型                                  """
 """ ************************************************************************************ """
-def train_DeepFM_model_demo(device):
+def train_PNN_model_demo(device):
     """
-    训练DeepFM的方式
+    训练PNN的方式
     :return:
     """
     train_filelist = ["%s%s" % (AID_DATA_DIR + 'train_data/', x) for x in os.listdir(AID_DATA_DIR + 'train_data/')]
@@ -118,7 +118,7 @@ def train_DeepFM_model_demo(device):
     deepfm = PNN_layer(num_feat=len(feat_dict_) + 1, num_field=39, dropout_deep=[0.5, 0.5, 0.5],
                        deep_layer_sizes=[400, 400], product_layer_dim=10,
                        reg_l1=0.01, reg_l2=1e-5, embedding_size=10, product_type='inner').to(DEVICE)
-    print("Start Training DeepFM Model!")
+    print("Start Training PNN Model!")
 
     # 定义损失函数还有优化器
     optimizer = torch.optim.Adam(deepfm.parameters())
@@ -127,7 +127,7 @@ def train_DeepFM_model_demo(device):
     train_item_count = get_in_filelist_item_num(train_filelist)
     test_item_count = get_in_filelist_item_num(test_filelist)
 
-    # 由于数据量过大, 如果使用pytorch的DataSet来自定义数据的话, 会耗时很久, 因此, 这里使用其它方式
+    # 由于数据量过大, 如果使用pytorch的DataSet来自定义数据集的话, 会耗时很久, 因此, 这里使用其它方式
     for epoch in range(1, EPOCHS + 1):
         train(deepfm, train_filelist, train_item_count, feat_dict_, device, optimizer, epoch)
         test(deepfm, test_filelist, test_item_count, feat_dict_, device)
@@ -330,7 +330,7 @@ def get_idx_value_label(fname, feat_dict_, shuffle=True):
     return features_idxs, features_values, labels
 
 if __name__ == '__main__':
-    train_DeepFM_model_demo(DEVICE)
+    train_PNN_model_demo(DEVICE)
 
 
 
