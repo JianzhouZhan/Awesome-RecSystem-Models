@@ -16,11 +16,11 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 """ ************************************************************************************ """
 def load_dataset():
     header = ['user_id', 'age', 'gender', 'occupation', 'zip_code']
-    df_user = pd.read_csv('../data/FM-Data/u.user', sep='|', names=header)
+    df_user = pd.read_csv('../data/Movielens100K/u.user', sep='|', names=header)
     header = ['item_id', 'title', 'release_date', 'video_release_date', 'IMDb_URL', 'unknown', 'Action', 'Adventure',
               'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror',
               'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
-    df_item = pd.read_csv('../data/FM-Data/u.item', sep='|', names=header, encoding="ISO-8859-1")
+    df_item = pd.read_csv('../data/Movielens100K/u.item', sep='|', names=header, encoding="ISO-8859-1")
     df_item = df_item.drop(columns=['title', 'release_date', 'video_release_date', 'IMDb_URL', 'unknown'])
 
     df_user['age'] = pd.cut(df_user['age'], [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
@@ -34,11 +34,11 @@ def load_dataset():
     cols = user_features + movie_features
 
     header = ['user_id', 'item_id', 'rating', 'timestamp']
-    df_train = pd.read_csv('../data/FM-Data/ua.base', sep='\t', names=header)
+    df_train = pd.read_csv('../data/Movielens100K/ua.base', sep='\t', names=header)
     df_train = df_train.merge(df_user, on='user_id', how='left')
     df_train = df_train.merge(df_item, on='item_id', how='left')
 
-    df_test = pd.read_csv('../data/FM-Data/ua.test', sep='\t', names=header)
+    df_test = pd.read_csv('../data/Movielens100K/ua.test', sep='\t', names=header)
     df_test = df_test.merge(df_user, on='user_id', how='left')
     df_test = df_test.merge(df_item, on='item_id', how='left')
 

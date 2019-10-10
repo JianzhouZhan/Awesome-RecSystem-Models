@@ -20,6 +20,7 @@
     - Split the data set by 9:1 for train and test.
     - How To Run:
     Run data/forOtherModels/dataProcess.py to pre-porcess the data, then run Model/FM_PyTorch.py
+    - the result is AUC: 0.7805 
     - For Multi-Classification implements: 
         - Tested dataset: Movielens100K
         - Run FM_Multi_PyTorch.py
@@ -62,6 +63,6 @@
     - Split the data set by 9:1 for train and test.
     - How To Run:
     Run data/forOtherModels/dataProcess.py to pre-porcess the data, then run Model/ProductNeuralNetwork_PyTorch.py
-    - After 3 epochs, the result of IPNN is AUC: 0.76585 Test set: Average loss: 0.47766
-    - After 3 epochs, the result of OPNN is AUC: 0.76592 Test set: Average loss: 0.47748
+    - After 3 epochs, the result of IPNN is AUC: 0.76585, LogLoss: 0.47766
+    - After 3 epochs, the result of OPNN is AUC: 0.76592, LogLoss: 0.47748
     
