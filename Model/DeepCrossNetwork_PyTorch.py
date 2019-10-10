@@ -6,13 +6,11 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score
-from time import time
 
 EPOCHS = 5
 BATCH_SIZE = 2048
 AID_DATA_DIR = '../data/Criteo/forDCN/'
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 """
 PyTorch implementation of Deep & Cross Network[1]
@@ -102,17 +100,16 @@ class DCN_layer(nn.Module):
 """ ************************************************************************************ """
 """                                     训练和测试FM模型                                   """
 """ ************************************************************************************ """
-def train_DeepFM_model_demo(device):
+def train_DCN_model_demo(device):
     """
-    训练DeepFM的方式
+    训练DCN的方式
     :return:
     """
     train_filelist = ["%s%s" % (AID_DATA_DIR + 'train/', x) for x in os.listdir(AID_DATA_DIR + 'train/')]
-    test_filelist = ["%s%s" % (AID_DATA_DIR + 'test_valid/', x) for x in os.listdir(AID_DATA_DIR + 'test_valid/')]
-
     train_file_id = [int(re.sub('[\D]', '', x)) for x in train_filelist]
     train_filelist = [train_filelist[idx] for idx in np.argsort(train_file_id)]
 
+    test_filelist = ["%s%s" % (AID_DATA_DIR + 'test_valid/', x) for x in os.listdir(AID_DATA_DIR + 'test_valid/')]
     test_file_id = [int(re.sub('[\D]', '', x)) for x in test_filelist]
     test_filelist = [test_filelist[idx] for idx in np.argsort(test_file_id)]
 
@@ -141,15 +138,8 @@ def train_DeepFM_model_demo(device):
             lookup_idx += 1
 
     for epoch in range(1, EPOCHS + 1):
-        tic = time()
         train(dcn, train_filelist, train_item_count, device, optimizer, epoch, cat_feat_idx_dict_list)
-        torch.save(dcn, 'DCN_' + str(epoch) + '.model')
-        toc = time()
-        dcn1 = torch.load('DCN_' + str(epoch) + '.model')
-        dcn1.eval()
-        test(dcn1, test_filelist, test_item_count, device, cat_feat_idx_dict_list)
-        print('The Time of Epoch: %.5f min' % float((toc - tic) / 60.0))
-        print('The Test Time of Epoch: %.5f min' % float((time() - toc) / 60.0))
+        test(dcn, test_filelist, test_item_count, device, cat_feat_idx_dict_list)
 
 
 def get_in_filelist_item_num(filelist):
@@ -304,7 +294,7 @@ def get_idx_value_label(fname, cat_feat_idx_dict_list, shuffle=True):
     cont_idx_ = list(range(1, 14))
     cat_idx_ = list(range(14, 40))
 
-    def new_process_line(line):
+    def _process_line(line):
         sparse_feat_idx = []
         dense_feat_value = []
 
@@ -328,7 +318,7 @@ def get_idx_value_label(fname, cat_feat_idx_dict_list, shuffle=True):
     sparse_features_idxs, dense_features_values, labels = [], [], []
     with open(fname.strip(), 'r') as fin:
         for line in fin:
-            sparse_feat_idx, dense_feat_value, label = new_process_line(line)
+            sparse_feat_idx, dense_feat_value, label = _process_line(line)
             sparse_features_idxs.append(sparse_feat_idx)
             dense_features_values.append(dense_feat_value)
             labels.append(label)
@@ -348,4 +338,4 @@ def get_idx_value_label(fname, cat_feat_idx_dict_list, shuffle=True):
 
 
 if __name__ == '__main__':
-    train_DeepFM_model_demo(DEVICE)
+    train_DCN_model_demo(DEVICE)

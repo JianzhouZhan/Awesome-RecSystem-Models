@@ -36,7 +36,9 @@ def train_test_model_demo(model, device, train_data_path, test_data_path, feat_d
 def train_model(model, train_filelist, feat_dict_, device, optimizer, epoch,
                 use_reg_l1=False, use_reg_l2=False):
     """
-
+    训练模型, 由于数据量过大, 如果使用PyTorch的DataLoader来load数据的话, 会很慢
+    这里, 使用的方式是依次读取每一个文件, 然后进行Shuffle,
+    最后, 依次拿出Batch大小的数据进行计算, 至该文件读取完毕, 则继续读取下一个文件至遍历完毕
     :param model:
     :param train_filelist:
     :param feat_dict_:
@@ -121,6 +123,14 @@ def train_model(model, train_filelist, feat_dict_, device, optimizer, epoch,
 
 
 def test_model(model, test_filelist, feat_dict_, device):
+    """
+    测试模型在测试集上的性能, 这里的方式基本与Train_model一样(除了不用Shuffle与梯度计算)
+    :param model:
+    :param test_filelist:
+    :param feat_dict_:
+    :param device:
+    :return:
+    """
     fname_idx = 0
     pred_y, true_y = [], []
     features_idxs, features_values, labels = None, None, None
@@ -199,6 +209,13 @@ def count_in_filelist_items(filelist):
 
 
 def get_idx_value_label(fname, feat_dict_, shuffle=True):
+    """
+    读取文件数据: 从一个数据文件中, 读取并得到Label, Feat_index, Feat_value值
+    :param fname:
+    :param feat_dict_:
+    :param shuffle:
+    :return:
+    """
     continuous_range_ = range(1, 14)
     categorical_range_ = range(14, 40)
     cont_min_ = [0, -3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -210,7 +227,7 @@ def get_idx_value_label(fname, feat_dict_, shuffle=True):
         feat_idx = []
         feat_value = []
 
-        # MinMax标准化连续型数据
+        # MinMax Normalization
         for idx in continuous_range_:
             if features[idx] == '':
                 feat_idx.append(0)

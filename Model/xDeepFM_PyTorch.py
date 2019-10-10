@@ -147,7 +147,8 @@ def train_xDeepFM_model_demo(device):
 
     # 下面的num_feat的长度还需要考虑缺失值的处理而多了一个维度
     xdeepfm = xDeepFM_layer(num_feat=len(featIndex) + 1, num_field=39, dropout_deep=[0, 0, 0, 0, 0],
-                            deep_layer_sizes=[400, 400, 400, 400], cin_layer_sizes=[100, 100, 50], embedding_size=16).to(DEVICE)
+                            deep_layer_sizes=[400, 400, 400, 400], cin_layer_sizes=[100, 100, 50],
+                            embedding_size=16).to(DEVICE)
     print("Start Training DeepFM Model!")
 
     # 定义损失函数还有优化器
@@ -381,5 +382,3 @@ def get_idx_value_label(fname, featIndex, feat_cnt, shuffle=True):
 
 if __name__ == '__main__':
     train_xDeepFM_model_demo(DEVICE)
-    # feat_dict_ = pickle.load(open(AID_DATA_DIR + 'forxDeepFM/aid_data/feat_dict_10.pkl2', 'rb'))
-    # print(len(feat_dict_))

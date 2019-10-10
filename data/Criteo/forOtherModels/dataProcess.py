@@ -1,6 +1,8 @@
 from data.Criteo.util import *
 
 """
+Data Process for FM, PNN, and DeepFM.
+
 [1] PaddlePaddle implementation of DeepFM for CTR prediction
     https://github.com/PaddlePaddle/models/blob/develop/PaddleRec/ctr/deepfm/data/preprocess.py
 """
