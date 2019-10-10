@@ -16,8 +16,13 @@
 ### 2. Implemented Models:
 - ##### FM: Factorization Machine
     - The paper is available at: https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf
-    - Tested dataset: Movielens100K
-    - Support Multi-Classification
+    - Tested dataset: Criteo
+    - Split the data set by 9:1 for train and test.
+    - How To Run:
+    Run data/forOtherModels/dataProcess.py to pre-porcess the data, then run Model/FM_PyTorch.py
+    - For Multi-Classification implements: 
+        - Tested dataset: Movielens100K
+        - Run FM_Multi_PyTorch.py
 - ##### FFM: Field-aware Factorization Machine
     - The paper is available at: https://www.csie.ntu.edu.tw/~cjlin/papers/ffm.pdf
     - Tested dataset: Movielens100K
@@ -27,7 +32,7 @@
     - Tested dataset: Criteo
     - Split the data set by 9:1 for train and test.
     - How To Run:
-    Run data/forDeepFM/deepFM_dataProcess.py to pre-porcess the data, then run Model/DeepFM_PyTorch.py
+    Run data/forOtherModels/dataProcess.py to pre-porcess the data, then run Model/DeepFM_PyTorch.py
     - After 3 Epoch, AUC: 0.795(The paper result is 0.801)
 - ##### DCN: Deep&Cross Network
     - The paper is available at: https://arxiv.org/pdf/1708.05123.pdf
@@ -54,6 +59,9 @@
 - ##### PNN: Product-based Neural Network
     - Paper: https://arxiv.org/pdf/1611.00144.pdf
     - Tested dataset: Criteo
+    - Split the data set by 9:1 for train and test.
+    - How To Run:
+    Run data/forOtherModels/dataProcess.py to pre-porcess the data, then run Model/ProductNeuralNetwork_PyTorch.py
     - After 3 epochs, the result of IPNN is AUC: 0.76585 Test set: Average loss: 0.47766
     - After 3 epochs, the result of OPNN is AUC: 0.76592 Test set: Average loss: 0.47748
     
