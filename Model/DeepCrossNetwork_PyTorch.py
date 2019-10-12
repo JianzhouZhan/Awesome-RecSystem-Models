@@ -27,7 +27,7 @@ Reference:
 class DCN_layer(nn.Module):
     def __init__(self, num_dense_feat, num_sparse_feat_list, dropout_deep, deep_layer_sizes,
                  reg_l1=0.01, reg_l2=0.01, num_cross_layers=4):
-        super(DCN_layer, self).__init__()
+        super().__init__()  # Python2 下使用 super(DCN_layer, self).__init__()
         self.reg_l1 = reg_l1  # Warning: L1 Norm is not used
         self.reg_l2 = reg_l2
         self.num_dense_feat = num_dense_feat              # denote as D

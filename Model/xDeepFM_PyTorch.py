@@ -34,7 +34,7 @@ Reference:
 class xDeepFM_layer(nn.Module):
     def __init__(self, num_feat, num_field, dropout_deep, deep_layer_sizes, cin_layer_sizes, split_half=True,
                  reg_l1=0.01, reg_l2=1e-5, embedding_size=10):
-        super(xDeepFM_layer, self).__init__()
+        super().__init__()  # Python2 下使用 super(xDeepFM_layer, self).__init__()
         self.reg_l1 = reg_l1
         self.reg_l2 = reg_l2
         self.num_feat = num_feat

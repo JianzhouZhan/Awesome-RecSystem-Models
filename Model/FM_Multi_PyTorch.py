@@ -67,7 +67,7 @@ def load_dataset():
 """ ************************************************************************************ """
 class FM_layer(nn.Module):
     def __init__(self, reg_l1=0.01, reg_l2=0.01, class_num=1, feature_num=10, latent_factor_dim=5):
-        super(FM_layer, self).__init__()
+        super().__init__()  # Python2 下使用 super(FM_layer, self).__init__()
         self.reg_l1 = reg_l1
         self.reg_l2 = reg_l2
         self.fea_num = feature_num

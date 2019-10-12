@@ -21,7 +21,7 @@ class PNN_layer(nn.Module):
 
     def __init__(self, num_feat, num_field, dropout_deep, deep_layer_sizes, product_layer_dim=10,
                  reg_l1=0.01, reg_l2=1e-5, embedding_size=10, product_type='outer'):
-        super(PNN_layer, self).__init__()
+        super().__init__()  # Python2 下使用 super(PNN_layer, self).__init__()
         self.reg_l1 = reg_l1
         self.reg_l2 = reg_l2
         self.num_feat = num_feat                                   # Denoted as

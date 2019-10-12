@@ -18,8 +18,8 @@ Reference:
 """
 
 class FM_layer(nn.Module):
-    def __init__(self, num_feat, num_field, reg_l1=0.01, reg_l2=0.01, embedding_size=10):
-        super(FM_layer, self).__init__()
+    def __init__(self, num_feat, num_field, reg_l1=0.01, reg_l2=0.01, embedding_size=16):
+        super().__init__()          # Python2 下使用 super(FM_layer, self).__init__()
         self.reg_l1 = reg_l1
         self.reg_l2 = reg_l2                    # L1/L2正则化并没有去使用
         self.num_feat = num_feat                # denote as M
