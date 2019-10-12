@@ -34,11 +34,11 @@
     - Split the data set by 9:1 for train and test.
     - How To Run:
     Run data/forOtherModels/dataProcess.py to pre-porcess the data, then run Model/DeepFM_PyTorch.py
-    - After 3 Epoch, AUC: 0.795(The paper result is 0.801)
+    - After 3 Epochs, AUC: 0.795(The paper result is 0.801)
 - ##### DCN: Deep&Cross Network
     - The paper is available at: https://arxiv.org/pdf/1708.05123.pdf
     - Tested dataset: Criteo
-    - Run data/forDCN/DCN_dataProcess.py to pre-process the data. According to the paper, the dataset is split by 9:0.5:0.5 for train, test and valid
+    - Run data/forDCN/DCN_dataProcess.py to pre-process the data. According to the paper, the data set is split by 9:0.5:0.5 for train, test and valid
     - Split the data set by 9:0.5:0.5 for train, test and valid
     - Run Model/DeepCrossNetwork_PyTorch.py, and the results are as follows:
     
