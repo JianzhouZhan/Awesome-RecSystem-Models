@@ -10,6 +10,115 @@ EPOCHS = 5
 BATCH_SIZE = 2048
 
 
+# def train_model_v2(model, device, train_label_path, train_idx_path, train_value_path, optimizer, epoch,
+#                    use_reg_l1=False, use_reg_l2=False):
+#     train_label, train_idx, train_value = [], [], []
+#     with open(train_label_path.strip(), 'r') as fin:
+#         for line in fin:
+#             train_label.append(line.rstrip('\n'))
+#     print("*******************************************")
+#     with open(train_idx_path.strip(), 'r') as fin:
+#         for line in fin:
+#             train_idx.append(line.rstrip('\n'))
+#     print("*******************************************")
+#     with open(train_value_path.strip(), 'r') as fin:
+#         for line in fin:
+#             train_value.append(line.rstrip('\n'))
+#
+#     print("*******************************************")
+#
+#     train_item_count = len(train_label)
+#     for batch_idx in range(math.ceil(train_item_count / BATCH_SIZE)):
+#         # 得到当前Batch所要取的数据的起始及终止下标
+#         st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
+#         ed_idx = min(ed_idx, train_item_count - 1)
+#
+#         batch_fea_idxs = train_idx[st_idx:ed_idx, :]
+#         batch_fea_values = train_value[st_idx:ed_idx, :]
+#         batch_labels = train_label[st_idx:ed_idx, :]
+#
+#         batch_fea_idxs = np.array([int(x) for x in batch_fea_idxs])
+#         batch_fea_values = np.array(np.array(re.split(x, '\t'), dtype=float) for x in batch_fea_values)
+#         batch_labels = np.array(np.array(re.split(x, '\t'), dtype=int) for x in batch_labels)
+#
+#         batch_fea_values = torch.from_numpy(batch_fea_values)
+#         batch_labels = torch.from_numpy(batch_labels)
+#
+#         idx = torch.LongTensor([[int(x) for x in x_idx] for x_idx in batch_fea_idxs])
+#         idx = idx.to(device)
+#         value = batch_fea_values.to(device, dtype=torch.float32)
+#         target = batch_labels.to(device, dtype=torch.float32)
+#         optimizer.zero_grad()
+#         output = model(idx, value)
+#         loss = F.binary_cross_entropy_with_logits(output, target)
+#
+#         if use_reg_l1:
+#             for param in model.parameters():
+#                 loss += model.reg_l1 * torch.sum(torch.abs(param))
+#         if use_reg_l2:
+#             for param in model.parameters():
+#                 loss += model.reg_l2 * torch.sum(torch.pow(param, 2))
+#
+#         loss.backward()
+#
+#         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=100)
+#         optimizer.step()
+#         if batch_idx % 1000 == 0:
+#             print('Train Epoch: {} [{} / {} ({:.0f}%)]\tLoss:{:.6f}'.format(
+#                 epoch, batch_idx * len(idx), train_item_count,
+#                        100. * batch_idx / math.ceil(int(train_item_count / BATCH_SIZE)), loss.item()))
+#
+#
+# def test_model_v2(model, device, train_label_path, train_idx_path, train_value_path):
+#     train_label, train_idx, train_value = [], [], []
+#     with open(train_label_path.strip(), 'r') as fin:
+#         for line in fin:
+#             train_label.append(line.rstrip('\n'))
+#     with open(train_idx_path.strip(), 'r') as fin:
+#         for line in fin:
+#             train_idx.append(line.rstrip('\n'))
+#     with open(train_value_path.strip(), 'r') as fin:
+#         for line in fin:
+#             train_value.append(line.rstrip('\n'))
+#
+#     test_item_count = len(train_label)
+#     test_loss = 0
+#     pred_y, true_y = [], []
+#
+#     with torch.no_grad():
+#         train_item_count = len(train_label)
+#         for batch_idx in range(math.ceil(train_item_count / BATCH_SIZE)):
+#             # 得到当前Batch所要取的数据的起始及终止下标
+#             st_idx, ed_idx = batch_idx * BATCH_SIZE, (batch_idx + 1) * BATCH_SIZE
+#             ed_idx = min(ed_idx, train_item_count - 1)
+#
+#             batch_fea_idxs = train_idx[st_idx:ed_idx, :]
+#             batch_fea_values = train_value[st_idx:ed_idx, :]
+#             batch_labels = train_label[st_idx:ed_idx, :]
+#
+#             batch_fea_idxs = np.array([int(x) for x in batch_fea_idxs])
+#             batch_fea_values = np.array(np.array(re.split(x, '\t'), dtype=float) for x in batch_fea_values)
+#             batch_labels = np.array(np.array(re.split(x, '\t'), dtype=int) for x in batch_labels)
+#
+#             batch_fea_values = torch.from_numpy(batch_fea_values)
+#             batch_labels = torch.from_numpy(batch_labels)
+#
+#             idx = torch.LongTensor([[int(x) for x in x_idx] for x_idx in batch_fea_idxs])
+#             idx = idx.to(device)
+#             value = batch_fea_values.to(device, dtype=torch.float32)
+#             target = batch_labels.to(device, dtype=torch.float32)
+#             output = model(idx, value)
+#
+#             test_loss += F.binary_cross_entropy_with_logits(output, target)
+#
+#             pred_y.extend(list(output.cpu().numpy()))
+#             true_y.extend(list(target.cpu().numpy()))
+#
+#         print('Roc AUC: %.5f' % roc_auc_score(y_true=np.array(true_y), y_score=np.array(pred_y)))
+#         test_loss /= math.ceil(test_item_count / BATCH_SIZE)
+#         print('Test set: Average loss: {:.5f}'.format(test_loss))
+
+
 def train_test_model_demo(model, device, train_data_path, test_data_path, feat_dict_):
     print("Start Training Model!")
 
