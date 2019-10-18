@@ -55,7 +55,6 @@ def split_data():
             shutil.move(filelist_[idx], 'test_data')
 
 
-
 def get_feat_dict():
     freq_ = 10
     dir_feat_dict_ = 'aid_data/feat_dict_' + str(freq_) + '.pkl2'
