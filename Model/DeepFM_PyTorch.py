@@ -1,13 +1,8 @@
-import re
-import os
-import math
 import pickle
 import torch
-import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.metrics import roc_auc_score
-from util.train_test_model_util import train_test_model_demo
+from util.train_model_util_PyTorch import train_test_model_demo
 
 EPOCHS = 10
 BATCH_SIZE = 2048

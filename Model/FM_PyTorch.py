@@ -1,7 +1,7 @@
 import pickle
 import torch
 import torch.nn as nn
-from util.train_test_model_util import train_test_model_demo
+from util.train_model_util_PyTorch import train_test_model_demo
 
 AID_DATA_DIR = '../data/Criteo/forOtherModels/'  # 辅助用途的文件路径
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -45,7 +45,7 @@ class FM_layer(nn.Module):
 
         # Step2: 再计算二阶部分
         secd_feat_emb = self.feat_embeddings(feat_index)                      # None * F * K
-        feat_emd_value = secd_feat_emb * feat_value                           # None * F * K(广播)
+        feat_emd_value = torch.mul(secd_feat_emb, feat_value)                 # None * F * K(广播)
 
         # sum_square part
         summed_feat_emb = torch.sum(feat_emd_value, 1)                        # None * K

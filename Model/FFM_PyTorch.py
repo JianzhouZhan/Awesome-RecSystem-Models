@@ -1,7 +1,7 @@
 import pickle
 import torch
 import torch.nn as nn
-from util.train_test_model_util import train_test_model_demo
+from util.train_model_util_PyTorch import train_test_model_demo
 
 AID_DATA_DIR = '../data/Criteo/forOtherModels/'  # 辅助用途的文件路径
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
