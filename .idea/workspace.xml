@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="718f28e0-e860-4410-b5db-d30bd1f7e54c" name="Default Changelist" comment="add Requirements!">
-      <change afterPath="$PROJECT_DIR$/Model/DeepFM_TensorFlow.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess_TensorFlow.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/util/train_model_util_TensorFlow.py" afterDir="false" />
+    <list default="true" id="718f28e0-e860-4410-b5db-d30bd1f7e54c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/DeepFM_PyTorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/DeepFM_PyTorch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/FFM_PyTorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/FFM_PyTorch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/FM_PyTorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/FM_PyTorch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/FM_TensorFlow.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/FM_TensorFlow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Criteo/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/Criteo/util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/train_test_model_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/util/train_model_util_PyTorch.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data/Criteo/util.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="38" column="37" selection-start-line="38" selection-start-column="37" selection-end-line="38" selection-end-column="37" />
+            <state relative-caret-position="143">
+              <caret line="47" column="51" lean-forward="true" selection-start-line="47" selection-start-column="51" selection-end-line="47" selection-end-column="51" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -58,8 +48,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/DeepFM_PyTorch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+            <state relative-caret-position="92">
+              <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -219,16 +209,16 @@
         <option value="$PROJECT_DIR$/util/train_test_model_util.py" />
         <option value="$PROJECT_DIR$/util/train_test_model_TensorFlow_util.py" />
         <option value="$PROJECT_DIR$/util/train_test_util_TensorFlow.py" />
-        <option value="$PROJECT_DIR$/Model/FM_TensorFlow.py" />
         <option value="$PROJECT_DIR$/Model/DeepFM_TensorFlow.py" />
         <option value="$PROJECT_DIR$/util/train_test_util_PyTorch.py" />
         <option value="$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py" />
         <option value="$PROJECT_DIR$/Model/cosFM.py" />
-        <option value="$PROJECT_DIR$/Model/DeepFM_PyTorch.py" />
         <option value="$PROJECT_DIR$/Model/FFM_PyTorch.py" />
         <option value="$PROJECT_DIR$/Model/FM_PyTorch.py" />
         <option value="$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess_TensorFlow.py" />
         <option value="$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess.py" />
+        <option value="$PROJECT_DIR$/Model/DeepFM_PyTorch.py" />
+        <option value="$PROJECT_DIR$/Model/FM_TensorFlow.py" />
         <option value="$PROJECT_DIR$/data/Criteo/util.py" />
       </list>
     </option>
@@ -643,27 +633,6 @@
       <option name="presentableId" value="Default" />
       <updated>1567680589653</updated>
     </task>
-    <task id="LOCAL-00010" summary="Update README.md">
-      <created>1569063311927</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1569063311927</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Update README.md">
-      <created>1569119440828</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1569119440828</updated>
-    </task>
-    <task id="LOCAL-00012" summary="1. 为DCN模型的Cross Layer加入BatchNorm1d处理&#10;2. 试着使用ModuleList来替换部分操作">
-      <created>1569119590951</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1569119590951</updated>
-    </task>
     <task id="LOCAL-00013" summary="Update README.md">
       <created>1569119790735</created>
       <option name="number" value="00013" />
@@ -986,7 +955,28 @@
       <option name="project" value="LOCAL" />
       <updated>1571400634089</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="add TensorFlow implements for DeepFM!">
+      <created>1571400805418</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1571400805418</updated>
+    </task>
+    <task id="LOCAL-00060" summary="add dataProcess for TensorFlow implements!">
+      <created>1571400872029</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1571400872029</updated>
+    </task>
+    <task id="LOCAL-00061" summary="add comments!">
+      <created>1571400890864</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1571400890864</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1023,14 +1013,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16557378" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16557378" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32937366" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49836066" weight="0.47840172" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49836066" visible="true" weight="0.47840172" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.40604752" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1088,9 +1077,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/RecommendationSystem" />
     </ignored-roots>
-    <MESSAGE value="change weight.data --&gt; weight in Initialing Parameters." />
-    <MESSAGE value="apply log_transform for xDeepFM" />
-    <MESSAGE value="change batch_size to 2048" />
     <MESSAGE value="update README.md for xDeepFM result" />
     <MESSAGE value="init PNN Model" />
     <MESSAGE value="change data pre-process for xDeepFM (According to the author's implement)" />
@@ -1113,7 +1099,10 @@
     <MESSAGE value="add an implement of FM Model with TensorFlow 2.0!&#10;Rename FFM_PyTorch.py as FFM_Multi_PyTorch.py" />
     <MESSAGE value="add Requirements!" />
     <MESSAGE value="add util for Training Model in TensorFlow" />
-    <option name="LAST_COMMIT_MESSAGE" value="add util for Training Model in TensorFlow" />
+    <MESSAGE value="add TensorFlow implements for DeepFM!" />
+    <MESSAGE value="add dataProcess for TensorFlow implements!" />
+    <MESSAGE value="add comments!" />
+    <option name="LAST_COMMIT_MESSAGE" value="add comments!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1122,16 +1111,6 @@
           <url>file://$PROJECT_DIR$/data/Criteo/dataProcess.py</url>
           <line>122</line>
           <option name="timeStamp" value="39" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/data/Criteo/util.py</url>
-          <line>129</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/data/Criteo/util.py</url>
-          <line>118</line>
-          <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Model/FM_PyTorch.py</url>
@@ -1427,8 +1406,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Model/DeepFM_PyTorch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+        <state relative-caret-position="92">
+          <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -1482,8 +1461,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/data/Criteo/util.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="38" column="37" selection-start-line="38" selection-start-column="37" selection-end-line="38" selection-end-column="37" />
+        <state relative-caret-position="143">
+          <caret line="47" column="51" lean-forward="true" selection-start-line="47" selection-start-column="51" selection-end-line="47" selection-end-column="51" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
