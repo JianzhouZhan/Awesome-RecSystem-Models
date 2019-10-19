@@ -6,7 +6,7 @@ import torch
 import numpy as np
 import tensorflow as tf
 from sklearn.metrics import roc_auc_score
-from util.train_test_util_TensorFlow import train_test_demo
+from util.train_model_util_TensorFlow import train_test_demo
 
 
 EPOCHS = 10
@@ -117,7 +117,6 @@ class DeepFM(tf.keras.Model):
 
 
 if __name__ == '__main__':
-    train_data_path, test_data_path = AID_DATA_DIR + 'train_data/', AID_DATA_DIR + 'test_data/'
     feat_dict_ = pickle.load(open(AID_DATA_DIR + 'aid_data/feat_dict_10.pkl2', 'rb'))
 
     deepfm = DeepFM(num_feat=len(feat_dict_) + 1, num_field=39,

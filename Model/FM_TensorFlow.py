@@ -52,13 +52,9 @@ class FM_layer(tf.keras.Model):
         return output
 
 
-
-
 if __name__ == '__main__':
-    # train_data_path, test_data_path = AID_DATA_DIR + 'train_data/', AID_DATA_DIR + 'test_data/'
     feat_dict_ = pickle.load(open(AID_DATA_DIR + 'feat_dict_10.pkl2', 'rb'))
     fm = FM_layer(num_feat=len(feat_dict_) + 1, num_field=39, reg_l2=1e-5, embedding_size=10)
-    # train_test_model_demo(fm, train_data_path, test_data_path, feat_dict_)
     train_label_path = AID_DATA_DIR + 'train_label'
     train_idx_path = AID_DATA_DIR + 'train_idx'
     train_value_path = AID_DATA_DIR + 'train_value'
