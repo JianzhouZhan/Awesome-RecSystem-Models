@@ -1,11 +1,10 @@
 import tensorflow as tf
 import os
 import pickle
-from util.train_model_util_TensorFlow import train_test_demo
+from util.train_model_util_TensorFlow import train_test_model_demo
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
 AID_DATA_DIR = '../data/Criteo/forOtherModels/'  # 辅助用途的文件路径
 
 class FM_layer(tf.keras.Model):
@@ -63,5 +62,5 @@ if __name__ == '__main__':
     test_idx_path = AID_DATA_DIR + 'test_idx'
     test_value_path = AID_DATA_DIR + 'test_value'
 
-    train_test_demo(fm, train_label_path, train_idx_path, train_value_path, test_label_path, test_idx_path,
-                    test_value_path)
+    train_test_model_demo(fm, train_label_path, train_idx_path, train_value_path, test_label_path, test_idx_path,
+                          test_value_path)

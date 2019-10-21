@@ -1,13 +1,10 @@
-import re
 import os
-import math
 import pickle
 import torch
-import numpy as np
 import tensorflow as tf
-from sklearn.metrics import roc_auc_score
-from util.train_model_util_TensorFlow import train_test_demo
+from util.train_model_util_TensorFlow import train_test_model_demo
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 EPOCHS = 10
 BATCH_SIZE = 2048
@@ -49,20 +46,26 @@ class DeepFM(tf.keras.Model):
         # None * M * K
 
         # 神经网络方面的参数
-        self.dense1 = tf.keras.layers.Dense(layer_sizes[0])
-        self.batch_norm1 = tf.keras.layers.BatchNormalization()
-        self.activation1 = tf.keras.layers.Activation('relu')
-        self.dropout1 = tf.keras.layers.Dropout(dropout_deep[1])
+        for i in range(len(layer_sizes)):
+            setattr(self, 'dense_' + str(i), tf.keras.layers.Dense(layer_sizes[i]))
+            setattr(self, 'batchNorm_' + str(i), tf.keras.layers.BatchNormalization())
+            setattr(self, 'activation_' + str(i), tf.keras.layers.Activation('relu'))
+            setattr(self, 'dropout_' + str(i), tf.keras.layers.Dropout(dropout_deep[i + 1]))
 
-        self.dense2 = tf.keras.layers.Dense(layer_sizes[1])
-        self.batch_norm2 = tf.keras.layers.BatchNormalization()
-        self.activation2 = tf.keras.layers.Activation('relu')
-        self.dropout2 = tf.keras.layers.Dropout(dropout_deep[2])
-
-        self.dense3 = tf.keras.layers.Dense(layer_sizes[2])
-        self.batch_norm3 = tf.keras.layers.BatchNormalization()
-        self.activation3 = tf.keras.layers.Activation('relu')
-        self.dropout3 = tf.keras.layers.Dropout(dropout_deep[3])
+        # self.dense1 = tf.keras.layers.Dense(layer_sizes[0])
+        # self.batch_norm1 = tf.keras.layers.BatchNormalization()
+        # self.activation1 = tf.keras.layers.Activation('relu')
+        # self.dropout1 = tf.keras.layers.Dropout(dropout_deep[1])
+        #
+        # self.dense2 = tf.keras.layers.Dense(layer_sizes[1])
+        # self.batch_norm2 = tf.keras.layers.BatchNormalization()
+        # self.activation2 = tf.keras.layers.Activation('relu')
+        # self.dropout2 = tf.keras.layers.Dropout(dropout_deep[2])
+        #
+        # self.dense3 = tf.keras.layers.Dense(layer_sizes[2])
+        # self.batch_norm3 = tf.keras.layers.BatchNormalization()
+        # self.activation3 = tf.keras.layers.Activation('relu')
+        # self.dropout3 = tf.keras.layers.Dropout(dropout_deep[3])
 
         # 最后一层全连接层
         self.fc = tf.keras.layers.Dense(1, activation=None, use_bias=True)
@@ -96,20 +99,26 @@ class DeepFM(tf.keras.Model):
         y_deep = tf.reshape(feat_emd_value, (-1, self.num_field * self.embedding_size))  # None * (F * K)
         y_deep = tf.keras.layers.Dropout(self.dropout_deep[0])(y_deep)
 
-        y_deep = self.dense1(y_deep)
-        y_deep = self.batch_norm1(y_deep)
-        y_deep = self.activation1(y_deep)
-        y_deep = self.dropout1(y_deep)
+        for i in range(len(self.layer_sizes)):
+            y_deep = getattr(self, 'dense_' + str(i))(y_deep)
+            y_deep = getattr(self, 'batchNorm_' + str(i))(y_deep)
+            y_deep = getattr(self, 'activation_' + str(i))(y_deep)
+            y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
 
-        y_deep = self.dense2(y_deep)
-        y_deep = self.batch_norm2(y_deep)
-        y_deep = self.activation2(y_deep)
-        y_deep = self.dropout2(y_deep)
-
-        y_deep = self.dense3(y_deep)
-        y_deep = self.batch_norm3(y_deep)
-        y_deep = self.activation3(y_deep)
-        y_deep = self.dropout3(y_deep)
+        # y_deep = self.dense1(y_deep)
+        # y_deep = self.batch_norm1(y_deep)
+        # y_deep = self.activation1(y_deep)
+        # y_deep = self.dropout1(y_deep)
+        #
+        # y_deep = self.dense2(y_deep)
+        # y_deep = self.batch_norm2(y_deep)
+        # y_deep = self.activation2(y_deep)
+        # y_deep = self.dropout2(y_deep)
+        #
+        # y_deep = self.dense3(y_deep)
+        # y_deep = self.batch_norm3(y_deep)
+        # y_deep = self.activation3(y_deep)
+        # y_deep = self.dropout3(y_deep)
 
         concat_input = tf.concat((y_first_order, y_secd_order, y_deep), axis=1)
         output = self.fc(concat_input)
@@ -131,5 +140,5 @@ if __name__ == '__main__':
     test_idx_path = AID_DATA_DIR + 'test_idx'
     test_value_path = AID_DATA_DIR + 'test_value'
 
-    train_test_demo(deepfm, train_label_path, train_idx_path, train_value_path, test_label_path, test_idx_path,
-                    test_value_path)
+    train_test_model_demo(deepfm, train_label_path, train_idx_path, train_value_path, test_label_path, test_idx_path,
+                          test_value_path)

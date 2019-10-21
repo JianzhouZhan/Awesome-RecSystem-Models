@@ -24,7 +24,7 @@
     - How To Run:
     Run data/forOtherModels/dataProcess_PyTorch.py to pre-process the data, then run Model/FM_PyTorch.py. Or
     run data/forOtherModels/dataProcess_TensorFlow.py to pre-process the data, and run Model/FM_TensorFlow.py
-    - the result is AUC: 0.7805 
+    - the result is AUC: 0.7805(PyTorch), 0.7791(TensorFlow)
     - For Multi-Classification implements: 
         - Tested dataset: Movielens100K
         - Run FM_Multi_PyTorch.py
