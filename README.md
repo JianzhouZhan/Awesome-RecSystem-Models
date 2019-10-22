@@ -16,7 +16,7 @@
     - This dataset contain 100,000 ratings from 1000 users on 1700 movies.
     - The details can be found at https://grouplens.org/datasets/movielens/100k/
     - This dataset have been downloaded and is available at 'data/Movielens100K' 
-### 1. Implemented Models:
+### 3. Implemented Models:
 - ##### FM: Factorization Machine
     - The paper is available at: https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf
     - Tested dataset: Criteo
