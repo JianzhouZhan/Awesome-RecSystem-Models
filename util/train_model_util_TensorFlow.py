@@ -49,6 +49,12 @@ def train_one_step(model, optimizer, idx, value, label):
         output = model(idx, value)
         loss = cross_entropy_loss(y_true=label, y_pred=output)
 
+        reg_loss = []
+        for p in model.trainable_variables:
+            reg_loss.append(tf.nn.l2_loss(p))
+        reg_loss = tf.reduce_sum(tf.stack(reg_loss))
+        loss = loss + model.reg_l2 * reg_loss
+
     grads = tape.gradient(loss, model.trainable_variables)
     grads = [tf.clip_by_norm(g, 100) for g in grads]
     optimizer.apply_gradients(grads_and_vars=zip(grads, model.trainable_variables))
