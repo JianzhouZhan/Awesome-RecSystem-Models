@@ -22,8 +22,8 @@
     - Tested dataset: Criteo
     - Split the data set by 9:1 for train and test.
     - How To Run:
-    Run data/forOtherModels/dataProcess_PyTorch.py to pre-process the data, then run Model/FM_PyTorch.py. Or
-    run data/forOtherModels/dataProcess_TensorFlow.py to pre-process the data, and run Model/FM_TensorFlow.py
+    Run data/forOtherModels/dataPreprocess_PyTorch.py to pre-process the data, then run Model/FM_PyTorch.py. Or
+    run data/forOtherModels/dataPreprocess_TensorFlow.py to pre-process the data, and run Model/FM_TensorFlow.py
     - the result is AUC: 0.7805(PyTorch), 0.7791(TensorFlow)
     - For Multi-Classification implements: 
         - Tested dataset: Movielens100K
@@ -37,14 +37,14 @@
     - Tested dataset: Criteo
     - Split the data set by 9:1 for train and test.
     - How To Run:
-    Run data/forOtherModels/dataProcess_PyTorch.py to pre-process the data, then run Model/DeepFM_PyTorch.py. Or 
-    run data/forOtherModels/dataProcess_TensorFlow.py to pre-process the data, and run Model/DeepFM_TensorFlow.py 
+    Run data/forOtherModels/dataPreprocess_PyTorch.py to pre-process the data, then run Model/DeepFM_PyTorch.py. Or 
+    run data/forOtherModels/dataPreprocess_TensorFlow.py to pre-process the data, and run Model/DeepFM_TensorFlow.py 
     - PyTorch: After 3 Epochs, AUC: 0.795(The paper result is 0.801)
     - TensorFlow: After 3 Epochs, AUC: 0.8014, LogLoss: 0.4516
 - ##### DCN: Deep&Cross Network
     - The paper is available at: https://arxiv.org/pdf/1708.05123.pdf
     - Tested dataset: Criteo
-    - Run data/forDCN/DCN_dataProcess_PyTorch.py to pre-process the data. According to the paper, the data set is split by 9:0.5:0.5 for train, test and valid
+    - Run data/forDCN/DCN_dataPreprocess_PyTorch.py to pre-process the data. According to the paper, the data set is split by 9:0.5:0.5 for train, test and valid
     - Split the data set by 9:0.5:0.5 for train, test and valid
     - Run Model/DeepCrossNetwork_PyTorch.py, and the results are as follows:
     
@@ -59,7 +59,7 @@
     - The Paper is available at: https://arxiv.org/pdf/1803.05170.pdf
     - Tested dataset: Criteo
     - Split the data set by 9:1 for train and test.
-    - Run data/forXDeepFM/xDeepFM_dataProcess_PyTorch.py to pre-process the data. The pre-process of xDeepFM is identical with
+    - Run data/forXDeepFM/xDeepFM_dataPreprocess_PyTorch.py to pre-process the data. The pre-process of xDeepFM is identical with
      that of DeepFM.
     - Run Model/xDeepFM_PyTorch.py.
     - After 5 epochs, the result is AUC 0.80148, LogLoss 0.45104 (The paper result is AUC 0.8052).
@@ -68,7 +68,7 @@
     - Tested dataset: Criteo
     - Split the data set by 9:1 for train and test.
     - How To Run:
-    Run data/forOtherModels/dataProcess_PyTorch.py to pre-process the data, then run Model/ProductNeuralNetwork_PyTorch.py
+    Run data/forOtherModels/dataPreprocess_PyTorch.py to pre-process the data, then run Model/ProductNeuralNetwork_PyTorch.py
     - After 3 epochs, the result of IPNN is AUC: 0.76585, LogLoss: 0.47766
     - After 3 epochs, the result of OPNN is AUC: 0.76592, LogLoss: 0.47748
     
