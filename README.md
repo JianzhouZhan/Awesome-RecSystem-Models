@@ -4,7 +4,7 @@
 ### 1. Requirements
 - TensorFlow2.0, PyTorch1.2+, Python3.6, NumPy, sk-learn, Pandas
 
-### 2. Relative DataSet
+### 2. DataSet
 - ##### Criteo
     - This dataset Contains about 45 million records. There are 13 features taking integer values (mostly count features)
     and 26 categorical features.
