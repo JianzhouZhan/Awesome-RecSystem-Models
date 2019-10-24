@@ -65,12 +65,12 @@ class PNN_layer(tf.keras.Model):
 
         # quadratic part
         if self.product_type == 'inner':
-            theta = tf.einsum('bnm,dn->bdnm', feat_embedding, self.theta)            # Batch * D1 * N * M
+            theta = tf.einsum('bnm,dn->bdnm', feat_embedding, self.theta)   # Batch * D1 * N * M
             lp = tf.einsum('bdnm,bdnm->bd', theta, theta)
         else:
             embed_sum = tf.reduce_sum(feat_embedding, axis=1)
-            p = tf.einsum('bm,bm->bmm', embed_sum, embed_sum)
-            lp = tf.einsum('bmm,dmm->bd', p, self.quadratic_weights)  # Batch * D1
+            p = tf.einsum('bm,bn->bmn', embed_sum, embed_sum)
+            lp = tf.einsum('bmn,dmn->bd', p, self.quadratic_weights)  # Batch * D1
 
         y_deep = tf.concat((lz, lp), axis=1)
         y_deep = tf.keras.layers.Dropout(self.dropout_deep[0])(y_deep)
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
     pnn = PNN_layer(num_feat=len(feat_dict_) + 1, num_field=39, dropout_deep=[0.5, 0.5, 0.5],
                     deep_layer_sizes=[400, 400], product_layer_dim=10,
-                    reg_l1=0.01, reg_l2=1e-5, embedding_size=10, product_type='inner')
+                    reg_l1=0.01, reg_l2=1e-5, embedding_size=10, product_type='outer')
 
     train_label_path = AID_DATA_DIR + 'train_label'
     train_idx_path = AID_DATA_DIR + 'train_idx'

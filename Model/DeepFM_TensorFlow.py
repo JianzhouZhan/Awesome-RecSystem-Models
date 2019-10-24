@@ -1,18 +1,16 @@
 import os
 import pickle
-import torch
 import tensorflow as tf
 from util.train_model_util_TensorFlow import train_test_model_demo
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
-EPOCHS = 10
+EPOCHS = 5
 BATCH_SIZE = 2048
 AID_DATA_DIR = '../data/Criteo/forOtherModels/'  # 辅助用途的文件路径
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 """
-PyTorch implementation of DeepFM[1]
+TensorFlow2.0 implementation of DeepFM[1]
 
 Reference:
 [1] DeepFM: A Factorization-Machine based Neural Network for CTR Prediction,
@@ -27,7 +25,7 @@ Reference:
 class DeepFM(tf.keras.Model):
     def __init__(self, num_feat, num_field, dropout_deep, dropout_fm,
                  reg_l1=0, reg_l2=0, layer_sizes=[400, 400, 400], embedding_size=10):
-        super().__init__()  # Python2 下使用 super(DeepFM, self).__init__()
+        super().__init__()
         self.reg_l1 = reg_l1
         self.reg_l2 = reg_l2                  # L1/L2正则化并没有去使用
         self.num_feat = num_feat              # denote as M
@@ -41,9 +39,9 @@ class DeepFM(tf.keras.Model):
         # first order term parameters embedding
         self.first_weights = tf.keras.layers.Embedding(num_feat, 1, embeddings_initializer='uniform')  # None * M * 1
 
-        # 需要定义一个 Embedding
-        self.feat_embeddings = tf.keras.layers.Embedding(num_feat, embedding_size, embeddings_initializer='uniform')
-        # None * M * K
+        # Feature Embedding
+        self.feat_embeddings = tf.keras.layers.Embedding(num_feat, embedding_size,
+                                                         embeddings_initializer='uniform')  # None * M * K
 
         # 神经网络方面的参数
         for i in range(len(layer_sizes)):
@@ -54,7 +52,6 @@ class DeepFM(tf.keras.Model):
 
         # 最后一层全连接层
         self.fc = tf.keras.layers.Dense(1, activation=None, use_bias=True)
-        # self.fc = nn.Linear(num_field + embedding_size + all_dims[-1], 1)
 
     def call(self, feat_index, feat_value):
         feat_value = tf.expand_dims(feat_value, axis=-1)                     # None * F * 1

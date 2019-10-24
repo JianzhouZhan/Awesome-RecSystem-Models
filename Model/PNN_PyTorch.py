@@ -74,8 +74,8 @@ class PNN_layer(nn.Module):
             lp = torch.einsum('bdnm,bdnm->bd', theta, theta)
         else:
             embed_sum = torch.sum(feat_embedding, dim=1)
-            p = torch.einsum('bm,bm->bmm', embed_sum, embed_sum)
-            lp = torch.einsum('bmm,dmm->bd', p, self.quadratic_weights)        # Batch * D1
+            p = torch.einsum('bm,bn->bmn', embed_sum, embed_sum)
+            lp = torch.einsum('bmn,dmn->bd', p, self.quadratic_weights)        # Batch * D1
 
         y_deep = torch.cat((lz, lp), dim=1)
         y_deep = nn.Dropout(self.dropout_deep[0])(y_deep)
@@ -95,5 +95,5 @@ if __name__ == '__main__':
     feat_dict_ = pickle.load(open(AID_DATA_DIR + 'aid_data/feat_dict_10.pkl2', 'rb'))
     pnn = PNN_layer(num_feat=len(feat_dict_) + 1, num_field=39, dropout_deep=[0.5, 0.5, 0.5],
                     deep_layer_sizes=[400, 400], product_layer_dim=10,
-                    reg_l1=0.01, reg_l2=1e-5, embedding_size=10, product_type='inner').to(DEVICE)
+                    reg_l1=0.01, reg_l2=1e-5, embedding_size=10, product_type='outer').to(DEVICE)
     train_test_model_demo(pnn, DEVICE, train_data_path, test_data_path, feat_dict_)
