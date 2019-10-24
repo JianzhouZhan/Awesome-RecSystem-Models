@@ -71,9 +71,9 @@
     Run data/forOtherModels/dataPreprocess_PyTorch.py to pre-process the data, then run Model/ProductNeuralNetwork_PyTorch.py
     - After 5 epochs, the results are AUC:
     
-    |Framework(Algorithm)|AUC|LogLoss|
-    |-----|---|-------|
-    |PyTorch(IPNN)|0.76585|0.47766|
-    |PyTorch(OPNN)|0.77656|0.46988|
-    |TensorFlow(IPNN)|0.77996|0.46827|
-    |TensorFlow(OPNN)|0.78098|0.46718|
+        |Framework(Algorithm)|AUC|LogLoss|
+        |-----|---|-------|
+        |PyTorch(IPNN)|0.76585|0.47766|
+        |PyTorch(OPNN)|0.77656|0.46988|
+        |TensorFlow(IPNN)|0.77996|0.46827|
+        |TensorFlow(OPNN)|0.78098|0.46718|
