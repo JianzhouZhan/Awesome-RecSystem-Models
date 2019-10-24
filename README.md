@@ -69,5 +69,10 @@
     - Split the data set by 9:1 for train and test.
     - How To Run:
     Run data/forOtherModels/dataPreprocess_PyTorch.py to pre-process the data, then run Model/ProductNeuralNetwork_PyTorch.py
-    - (PyTorch) After 5 epochs, the results are AUC: 0.76585(IPNN), 0.77656(OPNN), logLoss: 0.47766(IPNN), 0.46988(OPNN)
-    - (TensorFlow) After 5 epochs, the results are: AUC: 0.77996(IPNN), 0.78098(OPNN), logLoss: 0.46827(IPNN), 0.46718(OPNN)
+    - After 5 epochs, the results are AUC:
+    |Framework(Algorithm)|AUC|LogLoss|
+    |-----|---|-------|
+    |PyTorch(IPNN)|0.76585|0.47766|
+    |PyTorch(OPNN)|0.77656|0.46988|
+    |TensorFlow(IPNN)|0.77996|0.46827|
+    |TensorFlow(OPNN)|0.78098|0.46718|
