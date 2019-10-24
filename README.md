@@ -4,7 +4,7 @@
 ### 1. Requirements
 - TensorFlow2.0, PyTorch1.2+, Python3.6, NumPy, sk-learn, Pandas
 
-### 2. DataSet
+### 2. DataSets
 - ##### Criteo
     - This dataset Contains about 45 million records. There are 13 features taking integer values (mostly count features)
     and 26 categorical features.
@@ -69,6 +69,5 @@
     - Split the data set by 9:1 for train and test.
     - How To Run:
     Run data/forOtherModels/dataPreprocess_PyTorch.py to pre-process the data, then run Model/ProductNeuralNetwork_PyTorch.py
-    - After 3 epochs, the result of IPNN is AUC: 0.76585, LogLoss: 0.47766
-    - After 3 epochs, the result of OPNN is AUC: 0.76592, LogLoss: 0.47748
-    
+    - (PyTorch) After 5 epochs, the results are AUC: 0.76585(IPNN), 0.77656(OPNN), logLoss: 0.47766(IPNN), 0.46988(OPNN)
+    - (TensorFlow) After 5 epochs, the results are: AUC: 0.77996(IPNN), 0.78098(OPNN), logLoss: 0.46827(IPNN), 0.46718(OPNN)

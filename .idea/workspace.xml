@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="718f28e0-e860-4410-b5db-d30bd1f7e54c" name="Default Changelist" comment="update Model Results in README.md&#10;del useless comments">
-      <change afterPath="$PROJECT_DIR$/Model/PNN_TensorFlow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Criteo/forDCN/DCN_dataProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/Criteo/forDCN/DCN_dataPreprocess.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess_PyTorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/Criteo/forOtherModels/dataPreprocess_PyTorch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess_TensorFlow.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/Criteo/forOtherModels/dataPreprocess_TensorFlow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Criteo/forXDeepFM/xDeepFM_dataProcess.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/Criteo/forXDeepFM/xDeepFM_dataPreprocess.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +17,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="118">
-                <caret line="68" column="51" lean-forward="true" selection-start-line="68" selection-start-column="51" selection-end-line="68" selection-end-column="51" />
+              <first_editor relative-caret-position="196">
+                <caret line="71" column="75" selection-start-line="71" selection-start-column="75" selection-end-line="71" selection-end-column="75" />
               </first_editor>
               <second_editor />
             </state>
@@ -31,34 +26,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Model/DeepFM_PyTorch.py">
+        <entry file="file://$PROJECT_DIR$/data/Criteo/forXDeepFM/xDeepFM_dataPreprocess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="25" column="28" lean-forward="true" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+            <state relative-caret-position="239">
+              <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
               <folding>
-                <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py">
+        <entry file="file://$PROJECT_DIR$/util/train_model_util_PyTorch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1161">
-              <caret line="89" column="20" selection-end-line="99" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Model/FFM_PyTorch.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
+            <state relative-caret-position="237">
+              <caret line="146" column="7" selection-start-line="146" selection-start-column="7" selection-end-line="146" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -66,8 +49,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/PNN_TensorFlow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="320">
+              <caret line="72" column="39" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="39" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -76,10 +59,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Model/FM_PyTorch.py">
+        <entry file="file://$PROJECT_DIR$/Model/PNN_PyTorch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
+            <state relative-caret-position="349">
+              <caret line="99" lean-forward="true" selection-start-line="99" selection-end-line="99" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../miniconda3/envs/tf2.0_pytorch1.3/lib/python3.6/site-packages/tensorflow_core/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="523">
+              <caret line="414" column="2" selection-start-line="414" selection-start-column="2" selection-end-line="414" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -87,8 +82,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/DeepFM_TensorFlow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="109" column="45" lean-forward="true" selection-start-line="109" selection-start-column="45" selection-end-line="109" selection-end-column="45" />
+            <state relative-caret-position="713">
+              <caret line="109" column="19" selection-start-line="109" selection-start-column="19" selection-end-line="109" selection-end-column="19" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -99,8 +94,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/FM_TensorFlow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="64" column="16" selection-start-line="64" selection-start-column="16" selection-end-line="64" selection-end-column="16" />
+            <state relative-caret-position="610">
+              <caret line="64" column="19" selection-start-line="64" selection-start-column="19" selection-end-line="64" selection-end-column="19" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -111,8 +106,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/util/train_model_util_TensorFlow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+            <state relative-caret-position="-897">
+              <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -137,11 +132,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>optimizer</find>
-      <find>categorical_accuracy</find>
-      <find>float</find>
-      <find>tf.keras.</find>
-      <find>shuff</find>
       <find>datasets</find>
       <find>to_</find>
       <find>to_tensor</find>
@@ -167,6 +157,11 @@
       <find>dense_3</find>
       <find>dense</find>
       <find>reg_l1</find>
+      <find>Dense</find>
+      <find>concat</find>
+      <find>feat_value</find>
+      <find>reduce_sum</find>
+      <find>bm,bm-&gt;bmm</find>
     </findStrings>
     <replaceStrings>
       <replace>dropout</replace>
@@ -183,7 +178,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Model/Basic-FFM-Demo.py" />
         <option value="$PROJECT_DIR$/Model/Basic-DeepFM-Demo/dataProcess.py" />
         <option value="$PROJECT_DIR$/Model/Basic-FM-Demo.py" />
         <option value="$PROJECT_DIR$/Model/Basic-DeepFM-Demo/Basic-DeepFM-Demo.py" />
@@ -221,18 +215,19 @@
         <option value="$PROJECT_DIR$/util/train_test_model_TensorFlow_util.py" />
         <option value="$PROJECT_DIR$/util/train_test_util_TensorFlow.py" />
         <option value="$PROJECT_DIR$/util/train_test_util_PyTorch.py" />
-        <option value="$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py" />
         <option value="$PROJECT_DIR$/Model/cosFM.py" />
         <option value="$PROJECT_DIR$/Model/FFM_PyTorch.py" />
         <option value="$PROJECT_DIR$/Model/FM_PyTorch.py" />
         <option value="$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess_TensorFlow.py" />
         <option value="$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess.py" />
         <option value="$PROJECT_DIR$/data/Criteo/util.py" />
-        <option value="$PROJECT_DIR$/Model/PNN_TensorFlow.py" />
         <option value="$PROJECT_DIR$/Model/DeepFM_PyTorch.py" />
         <option value="$PROJECT_DIR$/Model/FM_TensorFlow.py" />
         <option value="$PROJECT_DIR$/util/train_model_util_TensorFlow.py" />
+        <option value="$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py" />
         <option value="$PROJECT_DIR$/Model/DeepFM_TensorFlow.py" />
+        <option value="$PROJECT_DIR$/Model/PNN_TensorFlow.py" />
+        <option value="$PROJECT_DIR$/Model/PNN_PyTorch.py" />
         <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
@@ -266,6 +261,20 @@
               <item name="RecommendationSystem" type="462c0819:PsiDirectoryNode" />
               <item name="data" type="462c0819:PsiDirectoryNode" />
               <item name="Criteo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecommendationSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecommendationSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="Criteo" type="462c0819:PsiDirectoryNode" />
+              <item name="forDCN" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RecommendationSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecommendationSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="Criteo" type="462c0819:PsiDirectoryNode" />
+              <item name="forOtherModels" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RecommendationSystem" type="b2602c69:ProjectViewProjectNode" />
@@ -330,7 +339,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.FM_TensorFlow">
+  <component name="RunManager" selected="Python.PNN_PyTorch">
     <configuration name="Basic-DCN-Demo" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="RecommendationSystem" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -344,27 +353,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Model/Basic-DCN-Demo.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="DeepCrossNetwork_PyTorch" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="RecommendationSystem" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Model" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Model/DeepCrossNetwork_PyTorch.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -499,6 +487,48 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="PNN_PyTorch" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="RecommendationSystem" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Model" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Model/PNN_PyTorch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="PNN_TensorFlow" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="RecommendationSystem" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Model" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Model/PNN_TensorFlow.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="ProductNeuralNetwork_PyTorch" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="RecommendationSystem" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -512,27 +542,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="dataProcess" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="RecommendationSystem" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data/Criteo/forOtherModels" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -613,19 +622,19 @@
       <item itemvalue="Python.xDeepFM_PyTorch" />
       <item itemvalue="Python.FFM_PyTorch" />
       <item itemvalue="Python.FM_Multi_PyTorch" />
-      <item itemvalue="Python.DeepCrossNetwork_PyTorch" />
       <item itemvalue="Python.FM_TensorFlow" />
-      <item itemvalue="Python.dataProcess" />
       <item itemvalue="Python.DeepFM_TensorFlow" />
       <item itemvalue="Python.train_model_util_TensorFlow" />
+      <item itemvalue="Python.PNN_TensorFlow" />
+      <item itemvalue="Python.PNN_PyTorch" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.PNN_PyTorch" />
+        <item itemvalue="Python.PNN_TensorFlow" />
         <item itemvalue="Python.FM_TensorFlow" />
         <item itemvalue="Python.DeepFM_TensorFlow" />
         <item itemvalue="Python.train_model_util_TensorFlow" />
-        <item itemvalue="Python.dataProcess" />
-        <item itemvalue="Python.DeepCrossNetwork_PyTorch" />
       </list>
     </recent_temporary>
   </component>
@@ -639,34 +648,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567680589653</updated>
-    </task>
-    <task id="LOCAL-00018" summary="1. 删除两处测试用代码">
-      <created>1569235345463</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1569235345463</updated>
-    </task>
-    <task id="LOCAL-00019" summary="1. 增加一些注释">
-      <created>1569285156834</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1569285156834</updated>
-    </task>
-    <task id="LOCAL-00020" summary="1. 增加clip_grad_norm_的处理">
-      <created>1569312686713</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1569312686713</updated>
-    </task>
-    <task id="LOCAL-00021" summary="1. Update File Name">
-      <created>1569313453589</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1569313453589</updated>
     </task>
     <task id="LOCAL-00022" summary="1. 优化得到Batch数据的算法">
       <created>1569313898161</created>
@@ -983,7 +964,35 @@
       <option name="project" value="LOCAL" />
       <updated>1571753419854</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="rename dataProcess as dataPreprocess">
+      <created>1571753827294</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1571753827294</updated>
+    </task>
+    <task id="LOCAL-00068" summary="update README.md">
+      <created>1571753944351</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1571753944351</updated>
+    </task>
+    <task id="LOCAL-00069" summary="add TensorFlow2.0 Implements for Product-based Neural Network!">
+      <created>1571879515968</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1571879515969</updated>
+    </task>
+    <task id="LOCAL-00070" summary="fix bug for PNN!">
+      <created>1571902853747</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1571902853747</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1022,19 +1031,19 @@
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16557378" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1863388" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.63930887" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49836066" weight="0.33801296" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.17170626" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4978142" visible="true" weight="0.5183585" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3315335" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32937366" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4989071" visible="true" weight="0.47084233" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50163937" side_tool="true" weight="0.40712744" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4989071" weight="0.2786177" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5021858" side_tool="true" weight="0.41792658" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.32937366" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -1085,10 +1094,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/RecommendationSystem" />
     </ignored-roots>
-    <MESSAGE value="del useless imported packages!" />
-    <MESSAGE value="Update README.md" />
-    <MESSAGE value="commit PNN demo" />
-    <MESSAGE value="add util for Criteo" />
     <MESSAGE value="move common func" />
     <MESSAGE value="comment useless func&#10;update README.md" />
     <MESSAGE value="init train_test_model method for Criteo DataSet!" />
@@ -1110,7 +1115,11 @@
     <MESSAGE value="use @tf.function" />
     <MESSAGE value="add l2 loss" />
     <MESSAGE value="add l2 loss for FM model" />
-    <option name="LAST_COMMIT_MESSAGE" value="add l2 loss for FM model" />
+    <MESSAGE value="rename dataProcess as dataPreprocess" />
+    <MESSAGE value="update README.md" />
+    <MESSAGE value="add TensorFlow2.0 Implements for Product-based Neural Network!" />
+    <MESSAGE value="fix bug for PNN!" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bug for PNN!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1130,6 +1139,11 @@
           <line>39</line>
           <option name="timeStamp" value="66" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Model/PNN_TensorFlow.py</url>
+          <line>71</line>
+          <option name="timeStamp" value="67" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1141,30 +1155,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torch/nn/modules/batchnorm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2346">
-          <caret line="109" column="88" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/shutil.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12466">
-          <caret line="547" selection-start-line="547" selection-end-line="547" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torchfm/dataset/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torch/nn/modules/conv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4025">
-          <caret line="182" column="49" selection-start-line="182" selection-start-column="49" selection-end-line="182" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/Criteo/forXDeepFM/test.py" />
     <entry file="file://$PROJECT_DIR$/test.py" />
     <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torchfm/dataset/criteo.py">
@@ -1198,16 +1188,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/Criteo/forXDeepFM/xDeepFM_dataProcess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="17" column="22" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Criteo/forXDeepFM/xDeepFM_dataProcess.py" />
     <entry file="file://$PROJECT_DIR$/../miniconda3/envs/pytorch1.2/lib/python3.6/site-packages/torch/nn/modules/module.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="12627">
@@ -1267,16 +1248,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/Criteo/forDCN/DCN_dataProcess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1610">
-          <caret line="74" column="26" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
-          <folding>
-            <element signature="e#38#102#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Criteo/forDCN/DCN_dataProcess.py" />
     <entry file="file://$PROJECT_DIR$/Model/FM_Multi_PyTorch.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1426">
@@ -1308,13 +1280,7 @@
     <entry file="file://$PROJECT_DIR$/Model/test_model.py" />
     <entry file="file://$PROJECT_DIR$/util/train_test_util_PyTorch.py" />
     <entry file="file://$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess.py" />
-    <entry file="file://$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess_TensorFlow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Criteo/forOtherModels/dataProcess_TensorFlow.py" />
     <entry file="file://$PROJECT_DIR$/data/Criteo/util.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="989">
@@ -1366,34 +1332,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/tf2.0_pytorch1.3/lib/python3.6/site-packages/sklearn/metrics/ranking.py">
+    <entry file="file://$PROJECT_DIR$/Model/DeepFM_PyTorch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5198">
-          <caret line="242" column="33" selection-start-line="242" selection-start-column="26" selection-end-line="242" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/FM_PyTorch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/PNN_TensorFlow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1161">
-          <caret line="89" column="20" selection-end-line="99" />
+        <state relative-caret-position="483">
+          <caret line="25" column="28" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
@@ -1407,10 +1349,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Model/DeepFM_PyTorch.py">
+    <entry file="file://$PROJECT_DIR$/Model/FM_PyTorch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="25" column="28" lean-forward="true" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+        <state relative-caret-position="69">
+          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/tf2.0_pytorch1.3/lib/python3.6/site-packages/sklearn/metrics/ranking.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5198">
+          <caret line="242" column="33" selection-start-line="242" selection-start-column="26" selection-end-line="242" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../miniconda3/envs/tf2.0_pytorch1.3/lib/python3.6/site-packages/tensorflow_core/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="523">
+          <caret line="414" column="2" selection-start-line="414" selection-start-column="2" selection-end-line="414" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/ProductNeuralNetwork_PyTorch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="98" column="17" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Criteo/forXDeepFM/xDeepFM_dataPreprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/DeepFM_TensorFlow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="713">
+          <caret line="109" column="19" selection-start-line="109" selection-start-column="19" selection-end-line="109" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/train_model_util_PyTorch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="146" column="7" selection-start-line="146" selection-start-column="7" selection-end-line="146" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/PNN_TensorFlow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="72" column="39" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/PNN_PyTorch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="349">
+          <caret line="99" lean-forward="true" selection-start-line="99" selection-end-line="99" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
@@ -1419,8 +1429,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Model/FM_TensorFlow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="64" column="16" selection-start-line="64" selection-start-column="16" selection-end-line="64" selection-end-column="16" />
+        <state relative-caret-position="610">
+          <caret line="64" column="19" selection-start-line="64" selection-start-column="19" selection-end-line="64" selection-end-column="19" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -1429,26 +1439,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/util/train_model_util_TensorFlow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/DeepFM_TensorFlow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="109" column="45" lean-forward="true" selection-start-line="109" selection-start-column="45" selection-end-line="109" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-897">
+          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="118">
-            <caret line="68" column="51" lean-forward="true" selection-start-line="68" selection-start-column="51" selection-end-line="68" selection-end-column="51" />
+          <first_editor relative-caret-position="196">
+            <caret line="71" column="75" selection-start-line="71" selection-start-column="75" selection-end-line="71" selection-end-column="75" />
           </first_editor>
           <second_editor />
         </state>
