@@ -70,6 +70,7 @@
     - How To Run:
     Run data/forOtherModels/dataPreprocess_PyTorch.py to pre-process the data, then run Model/ProductNeuralNetwork_PyTorch.py
     - After 5 epochs, the results are AUC:
+    
     |Framework(Algorithm)|AUC|LogLoss|
     |-----|---|-------|
     |PyTorch(IPNN)|0.76585|0.47766|
