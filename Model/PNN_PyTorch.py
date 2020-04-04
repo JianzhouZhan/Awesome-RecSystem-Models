@@ -61,7 +61,7 @@ class PNN_layer(nn.Module):
         # last layer
         self.fc = nn.Linear(deep_layer_sizes[-1], 1)
 
-    def forward(self, feat_index, feat_value):
+    def forward(self, feat_index, feat_value, use_dropout=True):
         # embedding part
         feat_embedding = self.feat_embeddings(feat_index)          # Batch * N * M
 
@@ -78,13 +78,15 @@ class PNN_layer(nn.Module):
             lp = torch.einsum('bmn,dmn->bd', p, self.quadratic_weights)        # Batch * D1
 
         y_deep = torch.cat((lz, lp), dim=1)
-        y_deep = nn.Dropout(self.dropout_deep[0])(y_deep)
+        if use_dropout:
+            y_deep = nn.Dropout(self.dropout_deep[0])(y_deep)
 
         for i in range(1, len(self.deep_layer_sizes) + 1):
             y_deep = getattr(self, 'linear_' + str(i))(y_deep)
             y_deep = getattr(self, 'batchNorm_' + str(i))(y_deep)
             y_deep = F.relu(y_deep)
-            y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
+            if use_dropout:
+                y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
 
         output = self.fc(y_deep)
         return output

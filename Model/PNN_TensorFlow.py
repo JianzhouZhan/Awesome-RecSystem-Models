@@ -56,7 +56,7 @@ class PNN_layer(tf.keras.Model):
         # last layer
         self.fc = tf.keras.layers.Dense(1, activation=None, use_bias=True)
 
-    def call(self, feat_index, feat_value):
+    def call(self, feat_index, feat_value, use_dropout=True):
         # embedding part
         feat_embedding = self.feat_embeddings(feat_index)          # Batch * N * M
 
@@ -73,13 +73,15 @@ class PNN_layer(tf.keras.Model):
             lp = tf.einsum('bmn,dmn->bd', p, self.quadratic_weights)  # Batch * D1
 
         y_deep = tf.concat((lz, lp), axis=1)
-        y_deep = tf.keras.layers.Dropout(self.dropout_deep[0])(y_deep)
+        if use_dropout:
+            y_deep = tf.keras.layers.Dropout(self.dropout_deep[0])(y_deep)
 
         for i in range(len(self.deep_layer_sizes)):
             y_deep = getattr(self, 'dense_' + str(i))(y_deep)
             y_deep = getattr(self, 'batchNorm_' + str(i))(y_deep)
             y_deep = getattr(self, 'activation_' + str(i))(y_deep)
-            y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
+            if use_dropout:
+                y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
 
         output = self.fc(y_deep)
         return output

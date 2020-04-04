@@ -296,7 +296,7 @@ def test_model(model, test_filelist, feat_dict_, device):
             idx = idx.to(device)
             value = batch_fea_values.to(device, dtype=torch.float32)
             target = batch_labels.to(device, dtype=torch.float32)
-            output = model(idx, value)
+            output = model(idx, value, use_dropout=False)
 
             test_loss += F.binary_cross_entropy_with_logits(output, target)
 

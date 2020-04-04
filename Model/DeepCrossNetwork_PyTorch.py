@@ -69,7 +69,7 @@ class DCN_layer(nn.Module):
         self.fc = nn.Linear(self.input_dim + all_dims[-1], 1)
         nn.init.xavier_uniform_(self.fc.weight)
 
-    def forward(self, feat_index_list, dense_x):
+    def forward(self, feat_index_list, dense_x, use_dropout=True):
         x0 = dense_x
         for i, feat_index in enumerate(feat_index_list):
             sparse_x = self.sparse_feat_embeddings[i](feat_index)
@@ -89,7 +89,8 @@ class DCN_layer(nn.Module):
             x_deep = getattr(self, 'linear_' + str(i))(x_deep)
             x_deep = getattr(self, 'batchNorm_' + str(i))(x_deep)
             x_deep = F.relu(x_deep)
-            x_deep = getattr(self, 'dropout_' + str(i))(x_deep)
+            if use_dropout:
+                x_deep = getattr(self, 'dropout_' + str(i))(x_deep)
 
         x_stack = torch.cat((x_cross, x_deep), dim=1)
         output = self.fc(x_stack)

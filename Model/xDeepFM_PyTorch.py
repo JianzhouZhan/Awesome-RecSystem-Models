@@ -80,7 +80,7 @@ class xDeepFM_layer(nn.Module):
         # output Part
         self.output_layer = nn.Linear(1 + fc_input_dim + deep_layer_sizes[-1], 1)
 
-    def forward(self, feat_index, feat_value):
+    def forward(self, feat_index, feat_value, use_dropout=True):
         # get feat embedding
         fea_embedding = self.feat_embedding(feat_index)    # None * F * K
         x0 = fea_embedding
@@ -112,13 +112,15 @@ class xDeepFM_layer(nn.Module):
 
         # Deep NN Part
         y_deep = fea_embedding.reshape(-1, self.num_field * self.embedding_size)  # None * (F * K)
-        y_deep = nn.Dropout(self.dropout_deep[0])(y_deep)
+        if use_dropout:
+            y_deep = nn.Dropout(self.dropout_deep[0])(y_deep)
 
         for i in range(1, len(self.deep_layer_sizes) + 1):
             y_deep = getattr(self, 'linear_' + str(i))(y_deep)
             y_deep = getattr(self, 'batchNorm_' + str(i))(y_deep)
             y_deep = F.relu(y_deep)
-            y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
+            if use_dropout:
+                y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
 
         # Output Part
         concat_input = torch.cat((linear_part, res, y_deep), dim=1)

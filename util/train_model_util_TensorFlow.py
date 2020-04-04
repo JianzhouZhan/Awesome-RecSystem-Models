@@ -82,7 +82,7 @@ def test_model(model, test_batch_dataset):
         if len(label) == 0:
             break
 
-        output = model(idx, value)
+        output = model(idx, value, use_dropout=False)
         binaryloss.update_state(y_true=label, y_pred=output)
         pred_y.extend(list(output.numpy()))
         true_y.extend(list(label.numpy()))

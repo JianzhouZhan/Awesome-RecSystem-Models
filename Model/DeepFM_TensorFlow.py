@@ -53,7 +53,7 @@ class DeepFM(tf.keras.Model):
         # 最后一层全连接层
         self.fc = tf.keras.layers.Dense(1, activation=None, use_bias=True)
 
-    def call(self, feat_index, feat_value):
+    def call(self, feat_index, feat_value, use_dropout=True):
         feat_value = tf.expand_dims(feat_value, axis=-1)                     # None * F * 1
 
         # Step1: 先计算一阶线性的部分 sum_square part
@@ -61,7 +61,8 @@ class DeepFM(tf.keras.Model):
         first_weight_value = tf.math.multiply(first_weights, feat_value)
 
         y_first_order = tf.math.reduce_sum(first_weight_value, axis=2)         # None * F
-        y_first_order = tf.keras.layers.Dropout(self.dropout_fm[0])(y_first_order)  # None * F
+        if use_dropout:
+            y_first_order = tf.keras.layers.Dropout(self.dropout_fm[0])(y_first_order)  # None * F
 
         # Step2: 再计算二阶部分
         secd_feat_emb = self.feat_embeddings(feat_index)                      # None * F * K
@@ -75,17 +76,20 @@ class DeepFM(tf.keras.Model):
         squared_feat_emd_value = tf.math.pow(feat_emd_value, 2)                # None * K
         interaction_part2 = tf.math.reduce_sum(squared_feat_emd_value, axis=1)  # None * K
         y_secd_order = 0.5 * tf.math.subtract(interaction_part1, interaction_part2)
-        y_secd_order = tf.keras.layers.Dropout(self.dropout_fm[1])(y_secd_order)
+        if use_dropout:
+            y_secd_order = tf.keras.layers.Dropout(self.dropout_fm[1])(y_secd_order)
 
         # Step3: Deep部分
         y_deep = tf.reshape(feat_emd_value, (-1, self.num_field * self.embedding_size))  # None * (F * K)
-        y_deep = tf.keras.layers.Dropout(self.dropout_deep[0])(y_deep)
+        if use_dropout:
+            y_deep = tf.keras.layers.Dropout(self.dropout_deep[0])(y_deep)
 
         for i in range(len(self.layer_sizes)):
             y_deep = getattr(self, 'dense_' + str(i))(y_deep)
             y_deep = getattr(self, 'batchNorm_' + str(i))(y_deep)
             y_deep = getattr(self, 'activation_' + str(i))(y_deep)
-            y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
+            if use_dropout:
+                y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
 
         concat_input = tf.concat((y_first_order, y_secd_order, y_deep), axis=1)
         output = self.fc(concat_input)

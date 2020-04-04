@@ -53,14 +53,15 @@ class DeepFM(nn.Module):
         # 最后一层全连接层
         self.fc = nn.Linear(num_field + embedding_size + all_dims[-1], 1)
 
-    def forward(self, feat_index, feat_value):
+    def forward(self, feat_index, feat_value, use_dropout=True):
         feat_value = torch.unsqueeze(feat_value, dim=2)                       # None * F * 1
 
         # Step1: 先计算一阶线性的部分 sum_square part
         first_weights = self.first_weights(feat_index)                        # None * F * 1
         first_weight_value = torch.mul(first_weights, feat_value)
         y_first_order = torch.sum(first_weight_value, dim=2)                  # None * F
-        y_first_order = nn.Dropout(self.dropout_fm[0])(y_first_order)         # None * F
+        if use_dropout:
+            y_first_order = nn.Dropout(self.dropout_fm[0])(y_first_order)         # None * F
 
         # Step2: 再计算二阶部分
         secd_feat_emb = self.feat_embeddings(feat_index)                      # None * F * K
@@ -75,17 +76,20 @@ class DeepFM(nn.Module):
         interaction_part2 = torch.sum(squared_feat_emd_value, dim=1)          # None * K
 
         y_secd_order = 0.5 * torch.sub(interaction_part1, interaction_part2)
-        y_secd_order = nn.Dropout(self.dropout_fm[1])(y_secd_order)
+        if use_dropout:
+            y_secd_order = nn.Dropout(self.dropout_fm[1])(y_secd_order)
 
         # Step3: Deep部分
         y_deep = feat_emd_value.reshape(-1, self.num_field * self.embedding_size)  # None * (F * K)
-        y_deep = nn.Dropout(self.dropout_deep[0])(y_deep)
+        if use_dropout:
+            y_deep = nn.Dropout(self.dropout_deep[0])(y_deep)
 
         for i in range(1, len(self.layer_sizes) + 1):
             y_deep = getattr(self, 'linear_' + str(i))(y_deep)
             y_deep = getattr(self, 'batchNorm_' + str(i))(y_deep)
             y_deep = F.relu(y_deep)
-            y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
+            if use_dropout:
+                y_deep = getattr(self, 'dropout_' + str(i))(y_deep)
 
         concat_input = torch.cat((y_first_order, y_secd_order, y_deep), dim=1)
         output = self.fc(concat_input)
